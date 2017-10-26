@@ -20,6 +20,5 @@ public interface AccountMapper {
 
     List<Account> findAll();
 
-
-    List<Account> findAllBySearch(@Param("idcardNo") String idcardNo, @Param("realName") String realName, @Param("loginName") String loginName,@Param("status") String status);
+    List<Account> findAllBySearch(Account account);
 }

@@ -21,5 +21,5 @@ public interface AccountService {
 
     PageInfo<Account> findWithPageInfo(Integer pageNo, Integer pageSize);
 
-    PageInfo<Account> findWithPageInfo1(Integer pageNo, Integer pageSize, String idcardNo, String realName, String loginName, String status);
+    PageInfo<Account> findWithPageInfo1(Integer pageNo, Integer pageSize, Account account);
 }

@@ -72,9 +72,9 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public PageInfo<Account> findWithPageInfo1(Integer pageNo, Integer pageSize, String idcardNo, String realName, String loginName, String status) {
+    public PageInfo<Account> findWithPageInfo1(Integer pageNo, Integer pageSize, Account account) {
 
-        System.out.println(accountMapper.findAllBySearch(idcardNo,realName,loginName,status));
+        System.out.println(accountMapper.findAllBySearch(account));
 
         pageNo = pageNo == null ? 1 : pageNo;
 
@@ -84,7 +84,7 @@ public class AccountServiceImpl implements AccountService {
 
         //获取全部的账务账号
 
-        List<Account> accountList = accountMapper.findAllBySearch(idcardNo,realName,loginName,status);
+        List<Account> accountList = accountMapper.findAllBySearch(account);
 
         //用PageInfo对结果进行包装
         PageInfo<Account> pageInfo = new PageInfo<Account>(accountList);

@@ -129,17 +129,12 @@
             url: "/service_add1",
             data: {
                 idcardNo: $("#idcardNo").val(),
-                loginName: $("#loginName").val(),
-                loginPasswd: $("#loginPasswd").val(),
-                loginPasswd2: $("#loginPasswd2").val(),
-                telephone: $("#telephone").val(),
-                recommenderIdcardNo: $("#recommenderIdcardNo").val(),
-                email: $("#email").val(),
-                occupation: $("#occupation").val(),
-                gender: $("input[type='radio']:checked").val(),
-                mailaddress: $("#mailaddress").val(),
-                zipcode: $("#zipcode").val(),
-                qq: $("#qq").val()
+                accountId: $("#accountId").val(),
+                costType:$("#costType").val(),
+                unixHost:$("#unixHost").val(),
+                osUsername:$("#osUsername").val(),
+                loginPasswd:$("#loginPasswd").val(),
+                loginPasswd2:$("#loginPasswd2").val()
             },
             success: function (result) {
 
@@ -149,7 +144,7 @@
 
                     showResultDiv(true);
 
-                    window.location.href = "/account_list";
+                    window.location.href = "/service_list";
                 } else {
 
                     window.setTimeout("showResultDiv(false);", 3000);

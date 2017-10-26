@@ -46,21 +46,20 @@ public class AccountController {
     @RequestMapping(value = "/account_pageInfo1")
 
     public PageInfo<Account> accountListBySearch(@RequestParam("pageNo") Integer pageNo, @RequestParam("pageSize") Integer pageSize,
-                                                 @RequestParam("idcardNo") String idcardNo, @RequestParam("realName") String realName,
-                                                 @RequestParam("loginName") String loginName, @RequestParam("status") String status) {
-        if (idcardNo.equals("")) {
-            idcardNo = null;
+                                                 Account account) {
+        if (account.getIdcardNo().equals("")) {
+            account.setIdcardNo(null);
         }
-        if (realName.equals("")) {
-            realName = null;
+        if (account.getRealName().equals("")) {
+            account.setRealName(null);
         }
-        if (loginName.equals("")) {
-            loginName = null;
+        if (account.getLoginName().equals("")) {
+            account.setLoginName(null);
         }
-        if (status.equals("")) {
-            status = null;
+        if (account.getStatus().equals("")) {
+            account.setStatus(null);
         }
-        return accountService.findWithPageInfo1(pageNo, pageSize, idcardNo, realName, loginName, status);
+        return accountService.findWithPageInfo1(pageNo, pageSize, account);
     }
 
     //跳转到添加账户账号页面
