@@ -1,0 +1,254 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>云科技</title>
+    <link type="text/css" rel="stylesheet" media="all" href="../../styles/global.css"/>
+    <link type="text/css" rel="stylesheet" media="all" href="../../styles/global_color.css"/>
+    <script src="/js/jquery-3.2.1.js"></script>
+    <script language="javascript" type="text/javascript">
+        //保存成功的提示信息
+        function showResultDiv(flag) {
+
+            var divResult = document.getElementById("save_result_info");
+
+            if (flag)
+
+                divResult.style.display = "block";
+
+            else
+                alert("保存失败");
+        }
+
+        //显示选填的信息项
+        function showOptionalInfo(imgObj) {
+            var div = document.getElementById("optionalInfo");
+            if (div.className == "hide") {
+                div.className = "show";
+                imgObj.src = "../../images/hide.png";
+            }
+            else {
+                div.className = "hide";
+                imgObj.src = "../../images/show.png";
+            }
+        }
+
+        function birth() {
+
+            var idcardNo = $("#idcardNo").val();
+
+            var birthday = idcardNo.substring(6, 10) + "-" + idcardNo.substring(10, 12) + "-" + idcardNo.substring(12, 14);
+
+            $("#birthdate").val(birthday);
+
+        }
+
+    </script>
+</head>
+<body>
+<!--Logo区域开始-->
+<div id="header">
+    <img src="../../images/logo.png" alt="logo" class="left"/>
+    当前用户: <span id="username"></span>&nbsp;
+    <a href="/quit">[退出]</a>
+</div>
+<!--Logo区域结束-->
+<!--导航区域开始-->
+<div id="navi">
+    <ul id="menu">
+        <li><a href="../index.html" class="index_off"></a></li>
+        <li><a href="/role_list" class="role_off"></a></li>
+        <li><a href="admin_list" class="admin_off"></a></li>
+        <li><a href="/fee_list" class="fee_off"></a></li>
+        <li><a href="/account_list" class="account_off"></a></li>
+        <li><a href="/service_list" class="service_off"></a></li>
+        <li><a href="/bill_list" class="bill_off"></a></li>
+        <li><a href="/report_list" class="report_off"></a></li>
+        <li><a href="/user_info" class="information_off"></a></li>
+        <li><a href="/user_modify_pwd" class="password_off"></a></li>
+    </ul>
+</div>
+<!--导航区域结束-->
+<!--主要区域开始-->
+<div id="main">
+    <!--保存成功或者失败的提示消息-->
+    <div id="save_result_info" class="save_success">保存成功</div>
+    <!--必填项-->
+    <div class="text_info clearfix"><span>姓名：</span></div>
+    <div class="input_info">
+        <input type="text" id="realName"/>
+        <span class="required">*</span>
+        <div class="validate_msg_long">20长度以内的汉字</div>
+        <div class="validate_msg_long" id="div1"></div>
+    </div>
+    <div class="text_info clearfix"><span>身份证：</span></div>
+    <div class="input_info">
+        <input type="text" id="idcardNo" onchange="birth()"/>
+        <span class="required">*</span>
+        <div class="validate_msg_long">正确的身份证号码格式</div>
+        <div class="validate_msg_long" id="div2"></div>
+    </div>
+    <div class="text_info clearfix"><span>登录账号：</span></div>
+    <div class="input_info">
+        <input type="text" id="loginName"/>
+        <span class="required">*</span>
+        <div class="validate_msg_long">30长度以内的字母、数字和下划线的组合</div>
+        <div class="validate_msg_long" id="div3"></div>
+    </div>
+    <div class="text_info clearfix"><span>密码：</span></div>
+    <div class="input_info">
+        <input type="password" id="loginPasswd"/>
+        <span class="required">*</span>
+        <div class="validate_msg_long">30长度以内的字母、数字和下划线的组合</div>
+        <div class="validate_msg_long" id="div4"></div>
+    </div>
+    <div class="text_info clearfix"><span>重复密码：</span></div>
+    <div class="input_info">
+        <input type="password" id="loginPasswd2"/>
+        <span class="required">*</span>
+        <div class="validate_msg_long">两次密码必须相同</div>
+        <div class="validate_msg_long" id="div5"></div>
+    </div>
+    <div class="text_info clearfix"><span>电话：</span></div>
+    <div class="input_info">
+        <input type="text" class="width200" id="telephone"/>
+        <span class="required">*</span>
+        <div class="validate_msg_medium">正确的电话号码格式：手机或固话</div>
+        <div class="validate_msg_medium" id="div6"></div>
+    </div>
+    <!--可选项-->
+    <div class="text_info clearfix"><span>可选项：</span></div>
+    <div class="input_info">
+        <img src="../../images/show.png" alt="展开" onclick="showOptionalInfo(this);"/>
+    </div>
+    <div id="optionalInfo" class="hide">
+        <div class="text_info clearfix"><span>推荐人身份证号码：</span></div>
+        <div class="input_info">
+            <input type="text" id="recommenderIdcardNo"/>
+            <div class="validate_msg_long">正确的身份证号码格式</div>
+        </div>
+        <div class="text_info clearfix"><span>生日：</span></div>
+        <div class="input_info">
+            <input type="text" readonly class="readonly" id="birthdate"/>
+        </div>
+        <div class="text_info clearfix"><span>Email：</span></div>
+        <div class="input_info">
+            <input type="text" class="width350" id="email"/>
+            <div class="validate_msg_tiny">50长度以内，合法的 Email 格式</div>
+        </div>
+        <div class="text_info clearfix"><span>职业：</span></div>
+        <div class="input_info">
+            <select id="occupation">
+                <option value="干部">干部</option>
+                <option value="学生">学生</option>
+                <option value="技术人员">技术人员</option>
+                <option value="其他">其他</option>
+            </select>
+        </div>
+        <div class="text_info clearfix"><span>性别：</span></div>
+        <div class="input_info fee_type">
+            <input type="radio" name="radSex" checked="checked" id="female" value="女"/>
+            <label for="female">女</label>
+            <input type="radio" name="radSex" id="male" value="男"/>
+            <label for="male">男</label>
+        </div>
+        <div class="text_info clearfix"><span>通信地址：</span></div>
+        <div class="input_info">
+            <input type="text" class="width350" id="mailaddress"/>
+
+            <div class="validate_msg_tiny">50长度以内</div>
+
+        </div>
+        <div class="text_info clearfix"><span>邮编：</span></div>
+        <div class="input_info">
+            <input type="text" id="zipcode"/>
+            <div class="validate_msg_long">6位数字</div>
+        </div>
+        <div class="text_info clearfix"><span>QQ：</span></div>
+        <div class="input_info">
+            <input type="text" id="qq"/>
+            <div class="validate_msg_long">5到13位数字</div>
+        </div>
+    </div>
+    <!--操作按钮-->
+    <div class="button_info clearfix">
+        <input type="button" value="保存" class="btn_save" id="sub"/>
+        <input type="button" value="取消" class="btn_save" onclick="window.location.href='/account_list'"/>
+    </div>
+</div>
+<!--主要区域结束-->
+<div id="footer">
+    <span>[源自北美的技术，最优秀的师资，最真实的企业环境，最适用的实战项目]</span>
+    <br/>
+    <span>版权所有(C)云科技有限公司 </span>
+</div>
+</body>
+<script type="text/javascript">
+    $("#sub").click(function () {
+        if ($("#realName").val() == null) {
+            $("#div1").html("输入的姓名不能为空");
+            return;
+        }
+        if ($("#realName").val().matches("^[\\u4e00-\\u9fa5]{0,20}$")) {
+            $("#div1").html("输入的姓名格式不正确");
+            return;
+        }
+        if ($("#idcardNo").val() == null) {
+            $("#div2").html("输入的身份证号不能为空");
+            return;
+        }
+
+        if ($("#loginName").val() == null) {
+            $("#div2").html("输入的身份证号格式不正确");
+            return;
+        }
+        if ($("#loginPasswd").val() == null) {
+            $("#div3").html("输入的密码不能为空");
+            return;
+        }
+        if ($("#loginPasswd2").val() == null) {
+            $("#div4").html("再次输入的密码不能为空");
+            return;
+        }
+        if ($("#telephone").val() == null) {
+            $("#div6").html("再次输入的密码不能为空");
+            return;
+        }
+        $.ajax({
+            url: "/account_add1",
+            data: {
+                realName: $("#realName").val(),
+                idcardNo: $("#idcardNo").val(),
+                loginName: $("#loginName").val(),
+                loginPasswd: $("#loginPasswd").val(),
+                loginPasswd2: $("#loginPasswd2").val(),
+                telephone: $("#telephone").val(),
+                recommenderIdcardNo: $("#recommenderIdcardNo").val(),
+                email: $("#email").val(),
+                occupation: $("#occupation").val(),
+                gender: $("input[type='radio']:checked").val(),
+                mailaddress: $("#mailaddress").val(),
+                zipcode: $("#zipcode").val(),
+                qq: $("#qq").val()
+            },
+            success: function (result) {
+
+                //保存结果的提示
+
+                if (result) {
+
+                    showResultDiv(true);
+
+                    window.location.href = "/account_list";
+                } else {
+
+                    window.setTimeout("showResultDiv(false);", 3000);
+
+                }
+            }
+        });
+    });
+
+</script>
+</html>

@@ -1,0 +1,413 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link type="text/css" rel="stylesheet" media="all" href="../../styles/global.css"/>
+    <link type="text/css" rel="stylesheet" media="all" href="../../styles/global_color.css"/>
+    <script src="/js/jquery-3.2.1.js"></script>
+    <script language="javascript" type="text/javascript">
+        //删除
+        function deleteService() {
+            var r = window.confirm("确定要删除此业务账号吗？\r\n删除后将不能恢复");
+
+            if (r) {
+
+                var serviceId = $(this).attr("num");
+
+                $.ajax({
+
+                    url: "/delService",
+
+                    data: {
+
+                        serviceId: serviceId
+
+                    },
+
+                    success: function (result) {
+
+                        var serviceId = result.data.serviceId;
+
+                        $("#trname" + serviceId).remove();
+
+                        $("#status" + serviceId).html(result.data.status);
+                    }
+
+                });
+
+                alert("删除成功，且已删除其下属的业务账号！");
+            }
+
+        }
+
+        //修改
+        function serviceModify() {
+
+            var serviceId = $(this).attr("num");
+
+            $.ajax({
+                url: "/service_modify",
+                data: {
+                    serviceId: serviceId
+                },
+                success: function () {
+                    window.location.href = "/service_modify1";
+                }
+            });
+        }
+
+        //跳转到/service_detail页面
+        function serviceDetail() {
+
+            var serviceId = $(this).attr("num");
+
+            $.ajax({
+
+                url: "/service_detail",
+
+                data: {
+
+                    serviceId: serviceId
+
+                },
+                success: function () {
+
+                    window.location.href = "/service_detail1";
+                }
+            });
+        }
+
+        //用来显示当前用户姓名
+        function getUsername() {
+            $.ajax({
+                url: "/showName",
+                success: function (result) {
+                    $("#username").html(result.data.name);
+                }
+            })
+        }
+
+        getUsername();
+
+        //开通账号
+
+        function setStartState() {
+
+            var r = window.confirm("确定要开通此账务账号吗？");
+
+            if (r) {
+
+                var serviceId = $(this).attr("num");
+
+                $.ajax({
+
+                    url: "/startService",
+
+                    data: {
+                        serviceId: serviceId
+                    },
+                    success: function (result) {
+
+                        $("#status" + serviceId).html(result.data.status);
+
+                        $("#createDate" + serviceId).html(result.data.createDate);
+
+                        $("#start" + serviceId).val("暂停").attr("class", "btn_pause");
+
+                    }
+                });
+
+                alert("开通成功");
+            }
+        }
+        //暂停账号
+        function setPauseState() {
+
+            var r = window.confirm("确定要暂停此账务账号吗？");
+
+            if (r) {
+
+                var serviceId = $(this).attr("num");
+
+                $.ajax({
+
+                    url: "/pauseService",
+
+                    data: {
+
+                        serviceId: serviceId
+
+                    },
+
+                    success: function (result) {
+
+                        $("#status" + serviceId).html(result.data.status);
+
+                        $("#pause" + serviceId).val("开通").attr("class", "btn_start");
+                    }
+                });
+
+                alert("暂停成功，且已暂停其下属的业务账号！");
+            }
+        }
+
+
+        function addNewTr(msg, flag) {
+
+            var tdleft = $("<td></td>");
+
+            $("<a href='###'></a>").html(msg.serviceId).appendTo(tdleft).click(serviceDetail).attr("num", msg.serviceId);
+
+            var tdleft1 = $("<td></td>").html(msg.accountId);
+
+            var tdleft2 = $("<td></td>").html(msg.account.idcardNo);
+
+            var tdleft3 = $("<td></td>").html(msg.account.realName);
+
+            var tdleft4 = $("<td></td>").html(msg.osUsername);
+
+            var tdleft5 = $("<td></td>").html(msg.status).attr("id", "status" + msg.serviceId);
+
+            var tdleft6 = $("<td></td>").html(msg.unixHost).attr("id", "unixHost" + msg.serviceId);
+
+            var tdleft7 = $("<td></td>").html(msg.cost.costType).attr("id", "costType" + msg.serviceId);
+
+            if (msg.status == "暂停") {
+
+                var tdstart = $("<input type='button' value='开通' class='btn_start'/>").click(setStartState).attr("num", msg.serviceId).attr("id", "start" + msg.serviceId);
+
+            }
+            if (msg.status == "开通") {
+
+                var tdstart = $("<input type='button' value='暂停' class='btn_pause'/>").click(setPauseState).attr("num", msg.serviceId).attr("id", "pause" + msg.serviceId);
+
+            }
+            if (msg.status == "暂停") {
+
+                var tdmodify = $("<input type='button' value='修改' class='btn_modify'/>").click(serviceModify).attr("num", msg.serviceId);
+
+            }
+
+            if (msg.status == "暂停") {
+
+                var tddelete = $("<input type='button' value='删除' class='btn_delete'/>").click(deleteService).attr("num", msg.serviceId);
+
+            }
+
+            var tdright = $("<td></td>").append(tdstart).append(tdmodify).append(tddelete).attr("id", "trname" + msg.serviceId);
+
+            var trob = $("<tr class='trob'></tr>").append(tdleft).append(tdleft1).append(tdleft2).append(tdleft3).append(tdleft4)
+                    .append(tdleft5).append(tdleft6).append(tdleft7).append(tdright);
+
+            if (flag != true) {
+                $("#datalist").append(trob);
+            } else {
+                $("#datalist").prepend(trob);
+            }
+        }
+
+        //获取全部信息用来显示全部,显示的为第一页的数据
+        function getAllMessage() {
+
+            $.ajax({
+
+                url: "/service_PageInfo",
+
+                data: {
+
+                    pageNo: null,
+
+                    pageSize: 4
+
+                },
+                success: function (result) {
+
+                    $(".trob").children().remove();
+
+                    $("#page").children().remove();
+
+                    $.each(result.list, function (index, domEle) {
+
+                        addNewTr(domEle);
+                    });
+
+                    pageInfo(result);
+                }
+            });
+        }
+        getAllMessage();
+
+        function pageInfo(result) {
+
+            //添加首页
+            var firstPage = $("<a></a>").html("首页").attr("num", result.firstPage).click(currentPage);
+
+            $("#pages").append(firstPage);
+
+            //添加上一页
+
+            if (result.isFirstPage) {
+
+                var prePage = $("<a></a>").html("上一页");
+
+            } else {
+
+                var preNo = result.prePage;
+
+                var prePage = $("<a></a>").html("上一页").attr("num", preNo).click(currentPage);
+
+            }
+            $("#pages").append(prePage);
+
+            //添加页数
+            for (var i = 0; i < result.pages; i++) {
+
+                var pageNumber = $("<a href='###'></a>").click(currentPage).attr("num", i + 1).html(i + 1);
+
+                if ((i + 1) == result.pageNum) {
+
+                    pageNumber.attr("class", "current_page");
+
+                }
+
+                $("#pages").append(pageNumber);
+
+            }
+
+            //添加下一页
+
+            if (result.isLastPage) {
+
+                var nextPage = $("<a></a>").html("下一页");
+
+            } else {
+
+                var nextNo = result.nextPage;
+
+                var nextPage = $("<a></a>").html("下一页").attr("num", nextNo).click(currentPage);
+            }
+
+            $("#pages").append(nextPage);
+
+            //添加尾页
+
+            var lastPage = $("<a></a>").html("尾页").attr("num", result.lastPage).click(currentPage);
+
+            $("#pages").append(lastPage);
+        }
+
+        function currentPage() {
+
+            var pageNo = $(this).attr("num");
+
+            $.ajax({
+                url: "/service_PageInfo",
+                data: {
+                    pageNo: pageNo,
+
+                    pageSize: 4
+                },
+                success: function (result) {
+
+                    $(".trob").children().remove();
+
+                    $("#pages").children().remove();
+
+                    $.each(result.list, function (index, domEle) {
+
+                        addNewTr(domEle);
+                    });
+
+                    pageInfo(result);
+                }
+            });
+        }
+    </script>
+</head>
+<body>
+<!--Logo区域开始-->
+<div id="header">
+    <img src="../../images/logo.png" alt="logo" class="left"/>
+    当前用户: <span id="username"></span>&nbsp;
+    <a href="/quit">[退出]</a>
+</div>
+<!--Logo区域结束-->
+<!--导航区域开始-->
+<div id="navi">
+    <ul id="menu">
+        <li><a href="../index.html" class="index_off"></a></li>
+        <li><a href="/role_list" class="role_off"></a></li>
+        <li><a href="admin_list" class="admin_off"></a></li>
+        <li><a href="/fee_list" class="fee_off"></a></li>
+        <li><a href="/account_list" class="account_off"></a></li>
+        <li><a href="/service_list" class="service_off"></a></li>
+        <li><a href="/bill_list" class="bill_off"></a></li>
+        <li><a href="/report_list" class="report_off"></a></li>
+        <li><a href="/user_info" class="information_off"></a></li>
+        <li><a href="/user_modify_pwd" class="password_off"></a></li>
+    </ul>
+</div>
+<!--导航区域结束-->
+<!--主要区域开始-->
+<div id="main">
+    <!--查询-->
+    <div class="search_add">
+        <div>OS 账号：<input type="text" class="width100 text_search"/></div>
+        <div>服务器 IP：<input type="text"  class="width100 text_search"/></div>
+        <div>身份证：<input type="text" class="text_search"/></div>
+        <div>状态：
+            <select class="select_search" id="status">
+                <option value="全部">全部</option>
+                <option value="开通">开通</option>
+                <option value="暂停">暂停</option>
+                <option value="删除">删除</option>
+            </select>
+        </div>
+        <div><input type="button" value="搜索" class="btn_search"/></div>
+        <input type="button" value="增加" class="btn_add" onclick="location.href='/service_add';"/>
+    </div>
+    <!--删除的操作提示-->
+    <div id="operate_result_info" class="operate_success">
+        <img src="../../images/close.png" onclick="this.parentNode.style.display='none';"/>
+        删除成功！
+    </div>
+    <!--数据区域：用表格展示数据-->
+    <div id="data">
+        <table id="datalist">
+            <thead>
+            <th class="width50">业务ID</th>
+            <th class="width70">账务账号ID</th>
+            <th class="width150">身份证</th>
+            <th class="width70">姓名</th>
+            <th>OS 账号</th>
+            <th class="width50">状态</th>
+            <th class="width100">服务器 IP</th>
+            <th class="width100">资费类型</th>
+            <th class="width200"></th>
+            </thead>
+            <tbody>
+
+            </tbody>
+        </table>
+        <p>业务说明：<br/>
+            1、创建即开通，记载创建时间；<br/>
+            2、暂停后，记载暂停时间；<br/>
+            3、重新开通后，删除暂停时间；<br/>
+            4、删除后，记载删除时间，标示为删除，不能再开通、修改、删除；<br/>
+            5、业务账号不设计修改密码功能，由用户自服务功能实现；<br/>
+            6、暂停和删除状态的账务账号下属的业务账号不能被开通。</p>
+    </div>
+    <!--分页-->
+    <div id="pages">
+
+    </div>
+</div>
+<!--主要区域结束-->
+<div id="footer">
+    <p>[源自北美的技术，最优秀的师资，最真实的企业环境，最适用的实战项目]</p>
+    <p>版权所有(C)云科技有限公司 </p>
+</div>
+</body>
+</html>

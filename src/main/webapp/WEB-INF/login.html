@@ -1,0 +1,82 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link type="text/css" rel="stylesheet" media="all" href="../styles/global.css"/>
+    <link type="text/css" rel="stylesheet" media="all" href="../styles/global_color.css"/>
+    <script type="text/javascript">
+        window.onload = function () {
+            document.getElementById("codeImg").onclick = function () {
+                document.getElementById("codeImg").setAttribute("src","/verifyCode?timeStamp=" + Date.now())
+            }
+        }
+    </script>
+</head>
+<body class="index">
+<div class="login_box">
+    <table>
+        <tr>
+            <td class="login_info">账号</td>
+            <td colspan="2"><input id="name" type="text" class="width150"/></td>
+            <td class="login_error_info">
+                <span class="required" id="span1"></span>
+                <span class="required" id="span2"></span>
+            </td>
+
+        </tr>
+        <tr>
+            <td class="login_info">密码：</td>
+            <div id="div3" style="color: red"></div>
+            <td colspan="2"><input id="password" type="password" class="width150"/></td>
+            <td><span class="required" id="span3"></span></td>
+        </tr>
+        <tr>
+            <td class="login_info">验证码：</td>
+            <td class="width70"><input type="text" class="width70" id="verifyCode"/></td>
+            <!--<td><img src="../images/valicode.jpg" alt="验证码" title="点击更换"/></td>-->
+            <td><img src="../images/valicode.jpg?timeStamp= + Date.now()" alt="验证码" title="点击更换" id="codeImg"></td>
+            <td><span class="required" id="verifyCode1"></span></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td class="login_button" colspan="2">
+                <a href="###" id="sub"><img src="../images/login_btn.png"/></a>
+            </td>
+        </tr>
+    </table>
+</div>
+</body>
+<script src="/js/jquery-3.2.1.js"></script>
+<script type="text/javascript">
+    $("#sub").click(function () {
+        $.ajax({
+            url: "/login1",
+            data: {
+                name: $("#name").val(),
+                password: $("#password").val(),
+                verifyCode:$("#verifyCode").val()
+            },
+            success: function (result) {
+                if (result.data == 1) {
+                    $("#span1").html("用户名不存在");
+                    $("#span3").html("密码输入错误");
+                }
+
+                if (result.data == 2) {
+                    $("#span3").html("密码输入错误");
+                }
+                if(result.data == 3){
+                    $("#verifyCode1").html("验证码输入错误");
+                }
+
+                if (result.data == 4) {
+
+                    window.location.href = "/index";
+                }
+            }
+        })
+    })
+</script>
+</html>

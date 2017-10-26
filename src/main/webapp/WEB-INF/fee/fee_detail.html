@@ -1,0 +1,144 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link type="text/css" rel="stylesheet" media="all" href="../../styles/global.css"/>
+    <link type="text/css" rel="stylesheet" media="all" href="../../styles/global_color.css"/>
+    <script src="/js/jquery-3.2.1.js"></script>
+    <script type="text/javascript">
+
+        function getCostMsg() {
+
+            $.ajax({
+                url: "/fee_detail2",
+                success: function (result) {
+                    $("#costId").val(result.data.costId),
+                            $("#name").val(result.data.name),
+                            $("#sel").val(result.data.status);
+                    if (result.data.status == "暂停") {
+                        $("#sel").append("<option>" + "暂停" + "</option>");
+                    }
+                    if (result.data.status == "开通") {
+                        $("#sel").append("<option>" + "开通" + "</option>");
+                    }
+                    $("input[type='radio']:checked").val(result.data.costType);
+                    if (result.data.costType == "包月") {
+                        $("#monthly").attr("checked", true);
+                    }
+                    if (result.data.costType == "套餐") {
+                        $("#package").attr("checked", true);
+                    }
+                    if (result.data.costType == "计时") {
+                        $("#timeBased").attr("checked", true);
+                    }
+                    $("#baseDuration").val(result.data.baseDuration),
+                            $("#baseCost").val(result.data.baseCost),
+                            $("#unitCost").val(result.data.unitCost),
+                            $("#creatime").val(result.data.creatime),
+                            $("#startime").val(result.data.startime),
+                            $("#descr").val(result.data.descr);
+                }
+            })
+
+        }
+
+        getCostMsg();
+
+        //用来显示当前用户姓名
+        function getUsername() {
+            $.ajax({
+                url: "/showName",
+                success: function (result) {
+                    $("#username").html(result.data.name);
+                }
+            })
+        }
+        getUsername();
+
+    </script>
+</head>
+<body>
+<!--Logo区域开始-->
+<div id="header">
+    <img src="../../images/logo.png" alt="logo" class="left"/>
+    当前用户: <span id="username"></span>&nbsp;
+    <a href="/quit">[退出]</a>
+</div>
+<!--Logo区域结束-->
+<!--导航区域开始-->
+<div id="navi">
+    <ul id="menu">
+        <li><a href="../index.html" class="index_off"></a></li>
+        <li><a href="/role_list" class="role_off"></a></li>
+        <li><a href="admin_list" class="admin_off"></a></li>
+        <li><a href="/fee_list" class="fee_off"></a></li>
+        <li><a href="/account_list" class="account_off"></a></li>
+        <li><a href="/service_list" class="service_off"></a></li>
+        <li><a href="/bill_list" class="bill_off"></a></li>
+        <li><a href="/report_list" class="report_off"></a></li>
+        <li><a href="/user_info" class="information_off"></a></li>
+        <li><a href="/user_modify_pwd" class="password_off"></a></li>
+    </ul>
+</div>
+<!--导航区域结束-->
+<!--主要区域开始-->
+<div id="main">
+    <div class="text_info clearfix"><span>资费ID：</span></div>
+    <div class="input_info"><input type="text" class="readonly" readonly id="costId"/></div>
+    <div class="text_info clearfix"><span>资费名称：</span></div>
+    <div class="input_info"><input type="text" class="readonly" readonly id="name"/></div>
+    <div class="text_info clearfix"><span>资费状态：</span></div>
+    <div class="input_info">
+        <select class="readonly" disabled id="sel">
+            <!--<option value="1">开通</option>-->
+            <!--<option value="2">暂停</option>-->
+            <!--<option value="3">删除</option>-->
+        </select>
+    </div>
+    <div class="text_info clearfix"><span>资费类型：</span></div>
+    <div class="input_info fee_type">
+        <input type="radio" name="radFeeType" id="monthly" disabled="disabled" value="包月"/>
+        <label for="monthly">包月</label>
+        <input type="radio" name="radFeeType" id="package" disabled="disabled" value="套餐"/>
+        <label for="package">套餐</label>
+        <input type="radio" name="radFeeType" checked="checked" id="timeBased" value="计时" disabled="disabled"/>
+        <label for="timeBased">计时</label>
+    </div>
+    <div class="text_info clearfix"><span>基本时长：</span></div>
+    <div class="input_info">
+        <input type="text" class="readonly" readonly id="baseDuration"/>
+        <span>小时</span>
+    </div>
+    <div class="text_info clearfix"><span>基本费用：</span></div>
+    <div class="input_info">
+        <input type="text" class="readonly" readonly id="baseCost"/>
+        <span>元</span>
+    </div>
+    <div class="text_info clearfix"><span>单位费用：</span></div>
+    <div class="input_info">
+        <input type="text" class="readonly" readonly id="unitCost"/>
+        <span>元/小时</span>
+    </div>
+    <div class="text_info clearfix"><span>创建时间：</span></div>
+    <div class="input_info"><input type="text" class="readonly" readonly id="creatime"/></div>
+    <div class="text_info clearfix"><span>启动时间：</span></div>
+    <div class="input_info"><input type="text" class="readonly" readonly id="startime"/></div>
+    <div class="text_info clearfix"><span>资费说明：</span></div>
+    <div class="input_info_high">
+        <textarea class="width300 height70 readonly" readonly id="descr"></textarea>
+    </div>
+    <div class="button_info clearfix">
+        <input type="button" value="返回" class="btn_save" onclick="location.href='/fee_list';"/>
+    </div>
+</div>
+<!--主要区域结束-->
+<div id="footer">
+    <span>[源自北美的技术，最优秀的师资，最真实的企业环境，最适用的实战项目]</span>
+    <br/>
+    <span>版权所有(C)云科技有限公司 </span>
+</div>
+</body>
+
+</html>
