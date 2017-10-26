@@ -10,6 +10,7 @@
     <script language="javascript" type="text/javascript">
         //删除
         function deleteService() {
+
             var r = window.confirm("确定要删除此业务账号吗？\r\n删除后将不能恢复");
 
             if (r) {
@@ -48,7 +49,9 @@
             var serviceId = $(this).attr("num");
 
             $.ajax({
+
                 url: "/service_modify",
+
                 data: {
                     serviceId: serviceId
                 },
@@ -154,7 +157,7 @@
         }
 
 
-        function addNewTr(msg, flag) {
+        function addNewTr(msg) {
 
             var tdleft = $("<td></td>");
 
@@ -201,11 +204,8 @@
             var trob = $("<tr class='trob'></tr>").append(tdleft).append(tdleft1).append(tdleft2).append(tdleft3).append(tdleft4)
                     .append(tdleft5).append(tdleft6).append(tdleft7).append(tdright);
 
-            if (flag != true) {
-                $("#datalist").append(trob);
-            } else {
-                $("#datalist").prepend(trob);
-            }
+            $("#datalist").append(trob);
+
         }
 
         //获取全部信息用来显示全部,显示的为第一页的数据
@@ -219,7 +219,9 @@
 
                     pageNo: null,
 
-                    pageSize: 4
+                    pageSize: 4,
+
+                    flag: 0
 
                 },
                 success: function (result) {
@@ -233,16 +235,18 @@
                         addNewTr(domEle);
                     });
 
-                    pageInfo(result);
+                    pageInfo(result, 0);
                 }
             });
         }
         getAllMessage();
 
-        function pageInfo(result) {
+
+        function pageInfo(result, flag) {
+
 
             //添加首页
-            var firstPage = $("<a></a>").html("首页").attr("num", result.firstPage).click(currentPage);
+            var firstPage = $("<a></a>").html("首页").attr("num", result.firstPage).attr("flag", flag).click(currentPage);
 
             $("#pages").append(firstPage);
 
@@ -250,21 +254,23 @@
 
             if (result.isFirstPage) {
 
-                var prePage = $("<a></a>").html("上一页");
+                var prePage = $("<a></a>").html("上一页").attr("flag", flag);
 
-            } else {
+            }
+            else {
 
                 var preNo = result.prePage;
 
-                var prePage = $("<a></a>").html("上一页").attr("num", preNo).click(currentPage);
+                var prePage = $("<a></a>").html("上一页").attr("num", preNo).attr("flag", flag).click(currentPage);
 
             }
+
             $("#pages").append(prePage);
 
             //添加页数
             for (var i = 0; i < result.pages; i++) {
 
-                var pageNumber = $("<a href='###'></a>").click(currentPage).attr("num", i + 1).html(i + 1);
+                var pageNumber = $("<a href='###'></a>").click(currentPage).attr("flag", flag).attr("num", i + 1).html(i + 1);
 
                 if ((i + 1) == result.pageNum) {
 
@@ -280,20 +286,20 @@
 
             if (result.isLastPage) {
 
-                var nextPage = $("<a></a>").html("下一页");
+                var nextPage = $("<a></a>").html("下一页").attr("flag", flag);
 
             } else {
 
                 var nextNo = result.nextPage;
 
-                var nextPage = $("<a></a>").html("下一页").attr("num", nextNo).click(currentPage);
+                var nextPage = $("<a></a>").html("下一页").attr("num", nextNo).attr("flag", flag).click(currentPage);
             }
 
             $("#pages").append(nextPage);
 
             //添加尾页
 
-            var lastPage = $("<a></a>").html("尾页").attr("num", result.lastPage).click(currentPage);
+            var lastPage = $("<a></a>").html("尾页").attr("num", result.lastPage).attr("flag", flag).click(currentPage);
 
             $("#pages").append(lastPage);
         }
@@ -302,12 +308,27 @@
 
             var pageNo = $(this).attr("num");
 
+            var flag = $(this).attr("flag");
+
             $.ajax({
+
                 url: "/service_PageInfo",
+
                 data: {
                     pageNo: pageNo,
 
-                    pageSize: 4
+                    pageSize: 4,
+
+                    osUsername: $("#osUsername").val(),
+
+                    unixHost: $("#unixHost").val(),
+
+                    idcardNo: $("#idcardNo").val(),
+
+                    status: $("#status").val(),
+
+                    flag:flag
+
                 },
                 success: function (result) {
 
@@ -320,10 +341,51 @@
                         addNewTr(domEle);
                     });
 
-                    pageInfo(result);
+                    pageInfo(result,flag);
                 }
             });
         }
+
+        //模糊查询
+        function fuzzySearch() {
+
+            $.ajax({
+
+                url: "/service_PageInfo",
+
+                data: {
+                    pageNo: 1,
+
+                    pageSize: 4,
+
+                    osUsername: $("#osUsername").val(),
+
+                    unixHost: $("#unixHost").val(),
+
+                    idcardNo: $("#idcardNo").val(),
+
+                    status: $("#status").val(),
+
+                    flag: 1
+                },
+                success: function (result) {
+
+                    $(".trob").children().remove();
+
+                    $("#page").children().remove();
+
+                    console.log(result);
+
+                    $.each(result.list, function (index, domEle) {
+
+                        addNewTr(domEle);
+                    });
+
+                    pageInfo(result, 1);
+                }
+            })
+        }
+
     </script>
 </head>
 <body>
@@ -354,9 +416,9 @@
 <div id="main">
     <!--查询-->
     <div class="search_add">
-        <div>OS 账号：<input type="text" class="width100 text_search"/></div>
-        <div>服务器 IP：<input type="text"  class="width100 text_search"/></div>
-        <div>身份证：<input type="text" class="text_search"/></div>
+        <div>OS 账号：<input type="text" class="width100 text_search" id="osUsername"/></div>
+        <div>服务器 IP：<input type="text" class="width100 text_search" id="unixHost"/></div>
+        <div>身份证：<input type="text" class="text_search" id="idcardNo"/></div>
         <div>状态：
             <select class="select_search" id="status">
                 <option value="全部">全部</option>
@@ -365,7 +427,7 @@
                 <option value="删除">删除</option>
             </select>
         </div>
-        <div><input type="button" value="搜索" class="btn_search"/></div>
+        <div><input type="button" value="搜索" class="btn_search" onclick="fuzzySearch()"/></div>
         <input type="button" value="增加" class="btn_add" onclick="location.href='/service_add';"/>
     </div>
     <!--删除的操作提示-->

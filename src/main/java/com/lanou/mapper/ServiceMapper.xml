@@ -25,11 +25,31 @@
     from service
     where service_id = #{serviceId,jdbcType=INTEGER}
   </select>
+  <!--查询全部-->
   <select id="findAll" resultMap="BaseResultMap">
     SELECT<include refid="Base_Column_List"/>
     FROM service
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+  <!--模糊查询-->
+    <select id="findAllBySearch" resultMap="BaseResultMap">
+      SELECT <include refid="Base_Column_List" />
+      FROM service
+      <where>
+        <if test="osUsername != null and osUsername != ''">
+          AND os_username = #{osUsername}
+        </if>
+        <if test="unixHost != null and unixHost != ''">
+          AND unix_host LIKE CONCAT('%', #{unixHost},'%')
+        </if>
+        <if test="idcardNo != null and idcardNo != ''">
+          AND idcardNo LIKE CONCAT('%', #{idcardNo},'%')
+        </if>
+        <if test="status != null and status != ''">
+          AND status = #{status}
+        </if>
+      </where>
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from service
     where service_id = #{serviceId,jdbcType=INTEGER}
   </delete>

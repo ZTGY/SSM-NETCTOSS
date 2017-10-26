@@ -20,4 +20,6 @@ public interface ServicesService {
     int updateByPrimaryKey(Services record);
 
     PageInfo<Services> findAllServicesWithPageInfo(Integer pageNo, Integer pageSize);
+
+    PageInfo<Services> findAllServicesWithPageInfo1(Integer pageNo, Integer pageSize, Services services);
 }

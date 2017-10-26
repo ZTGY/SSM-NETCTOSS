@@ -18,4 +18,6 @@ public interface ServiceMapper {
     int updateByPrimaryKey(Services record);
 
     List<Services> findAll();
+
+    List<Services> findAllBySearch(Services services);
 }

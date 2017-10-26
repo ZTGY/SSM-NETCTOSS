@@ -74,7 +74,6 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public PageInfo<Account> findWithPageInfo1(Integer pageNo, Integer pageSize, Account account) {
 
-        System.out.println(accountMapper.findAllBySearch(account));
 
         pageNo = pageNo == null ? 1 : pageNo;
 
@@ -89,7 +88,14 @@ public class AccountServiceImpl implements AccountService {
         //用PageInfo对结果进行包装
         PageInfo<Account> pageInfo = new PageInfo<Account>(accountList);
 
+
         return pageInfo;
+    }
+
+    @Override
+    public Account selectByIdcardNo(String idcardNo) {
+
+        return accountMapper.selectByIdcardNo(idcardNo);
     }
 
 }

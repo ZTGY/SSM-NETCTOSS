@@ -21,16 +21,7 @@
                     $("#telephone").val(result.data.telephone)
                     $("#recommenderId").val(result.data.recommenderId)
                     $("#recommenderIdcardNo").val(result.data.idcardNo)
-                    $("#sel").val(result.data.status);
-                    if (result.data.status == "暂停") {
-                        $("#sel").append("<option>" + "暂停" + "</option>");
-                    }
-                    if (result.data.status == "开通") {
-                        $("#sel").append("<option>" + "开通" + "</option>");
-                    }
-                    if (result.data.status == "删除") {
-                        $("#sel").append("<option>" + "删除" + "</option>");
-                    }
+                    $("#sel").append("<option>" + result.data.status + "</option>")
                     $("#createDate").val(result.data.createDate)
                     $("#lastLoginTime").val(result.data.lastLoginTime)
                     $("#lastLoginIp").val(result.data.lastLoginIp)

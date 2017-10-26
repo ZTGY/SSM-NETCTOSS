@@ -43,7 +43,17 @@
             $("#birthdate").val(birthday);
 
         }
+        //用来显示当前用户姓名
+        function getUsername() {
+            $.ajax({
+                url: "/showName",
+                success: function (result) {
+                    $("#username").html(result.data.name);
+                }
+            })
+        }
 
+        getUsername();
     </script>
 </head>
 <body>

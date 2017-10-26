@@ -14,16 +14,10 @@
             $.ajax({
                 url: "/fee_detail2",
                 success: function (result) {
-                    $("#costId").val(result.data.costId),
-                            $("#name").val(result.data.name),
-                            $("#sel").val(result.data.status);
-                    if (result.data.status == "暂停") {
-                        $("#sel").append("<option>" + "暂停" + "</option>");
-                    }
-                    if (result.data.status == "开通") {
-                        $("#sel").append("<option>" + "开通" + "</option>");
-                    }
-                    $("input[type='radio']:checked").val(result.data.costType);
+                    $("#costId").val(result.data.costId)
+                            $("#name").val(result.data.name)
+                            $("#sel").append("<option>" + result.data.status + "</option>")
+                    $("input[type='radio']:checked").val(result.data.costType)
                     if (result.data.costType == "包月") {
                         $("#monthly").attr("checked", true);
                     }
@@ -33,12 +27,12 @@
                     if (result.data.costType == "计时") {
                         $("#timeBased").attr("checked", true);
                     }
-                    $("#baseDuration").val(result.data.baseDuration),
-                            $("#baseCost").val(result.data.baseCost),
-                            $("#unitCost").val(result.data.unitCost),
-                            $("#creatime").val(result.data.creatime),
-                            $("#startime").val(result.data.startime),
-                            $("#descr").val(result.data.descr);
+                    $("#baseDuration").val(result.data.baseDuration)
+                            $("#baseCost").val(result.data.baseCost)
+                            $("#unitCost").val(result.data.unitCost)
+                            $("#creatime").val(result.data.creatime)
+                            $("#startime").val(result.data.startime)
+                            $("#descr").val(result.data.descr)
                 }
             })
 
@@ -92,9 +86,7 @@
     <div class="text_info clearfix"><span>资费状态：</span></div>
     <div class="input_info">
         <select class="readonly" disabled id="sel">
-            <!--<option value="1">开通</option>-->
-            <!--<option value="2">暂停</option>-->
-            <!--<option value="3">删除</option>-->
+
         </select>
     </div>
     <div class="text_info clearfix"><span>资费类型：</span></div>

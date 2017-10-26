@@ -63,4 +63,20 @@ public class ServicesServiceImpl implements ServicesService {
 
         return pageInfo;
     }
+
+    @Override
+    public PageInfo<Services> findAllServicesWithPageInfo1(Integer pageNo, Integer pageSize, Services services) {
+
+        pageNo = pageNo == null ? 1 : pageNo;
+
+        pageSize = pageSize == null ? 5 : pageSize;
+
+        PageHelper.startPage(pageNo, pageSize);
+
+        List<Services> servicesList = serviceMapper.findAllBySearch(services);
+
+        PageInfo<Services> pageInfo = new PageInfo<Services>(servicesList);
+
+        return pageInfo;
+    }
 }

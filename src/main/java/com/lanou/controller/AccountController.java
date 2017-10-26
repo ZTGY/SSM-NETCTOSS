@@ -32,34 +32,20 @@ public class AccountController {
         return "account/account_list";
     }
 
-    //获取分页信息,显示全部账务账号
+    //获取分页信息,显示全部账务账号,高级查询显示全部账务账号
     @ResponseBody
     @RequestMapping(value = "/account_pageInfo")
 
-    public PageInfo<Account> accountList(@RequestParam("pageNo") Integer pageNo, @RequestParam("pageSize") Integer pageSize) {
+    public PageInfo<Account> accountList(@RequestParam("pageNo") Integer pageNo, @RequestParam("pageSize") Integer pageSize, Account account, Integer flag) {
 
-        return accountService.findWithPageInfo(pageNo, pageSize);
-    }
-
-    //高级查询显示全部账务账号
-    @ResponseBody
-    @RequestMapping(value = "/account_pageInfo1")
-
-    public PageInfo<Account> accountListBySearch(@RequestParam("pageNo") Integer pageNo, @RequestParam("pageSize") Integer pageSize,
-                                                 Account account) {
-        if (account.getIdcardNo().equals("")) {
-            account.setIdcardNo(null);
+        if (flag == 0) {
+            return accountService.findWithPageInfo(pageNo, pageSize);
+        } else {
+            if (account.getStatus().equals("全部")) {
+                account.setStatus(null);
+            }
+            return accountService.findWithPageInfo1(pageNo, pageSize, account);
         }
-        if (account.getRealName().equals("")) {
-            account.setRealName(null);
-        }
-        if (account.getLoginName().equals("")) {
-            account.setLoginName(null);
-        }
-        if (account.getStatus().equals("")) {
-            account.setStatus(null);
-        }
-        return accountService.findWithPageInfo1(pageNo, pageSize, account);
     }
 
     //跳转到添加账户账号页面
@@ -134,7 +120,7 @@ public class AccountController {
 
         account.setCreateDate((new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(new Date())));
 
-        account.setPauseDate(null);
+        account.setPauseDate("0000-00-00");
 
         accountService.updateByPrimaryKeySelective(account);
 
@@ -238,6 +224,15 @@ public class AccountController {
     public AjaxResult feeDetail2(HttpServletRequest request) {
 
         Account account = (Account) request.getSession().getAttribute("account");
+
+        return new AjaxResult(account);
+    }
+    //通过身份账号查询账务账号
+    @ResponseBody
+    @RequestMapping(value = "/searchAccountId")
+    public AjaxResult searchAccountId(@RequestParam("idcardNo")String idcardNo) {
+
+        Account account = accountService.selectByIdcardNo(idcardNo);
 
         return new AjaxResult(account);
     }

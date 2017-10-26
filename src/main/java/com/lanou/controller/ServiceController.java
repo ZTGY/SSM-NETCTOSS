@@ -32,9 +32,21 @@ public class ServiceController {
     //获取分页信息,显示全部业务账号
     @ResponseBody
     @RequestMapping(value = "/service_PageInfo")
-    public PageInfo<Services> serviceList(@RequestParam("pageNo") Integer pageNo, @RequestParam("pageSize") Integer pageSize) {
+    public PageInfo<Services> serviceList(@RequestParam("pageNo") Integer pageNo, @RequestParam("pageSize") Integer pageSize,Services services,Integer flag) {
 
-        return servicesService.findAllServicesWithPageInfo(pageNo, pageSize);
+        if (flag == 0) {
+             return servicesService.findAllServicesWithPageInfo(pageNo, pageSize);
+        } else {
+            if (services.getStatus().equals("全部")) {
+
+                services.setStatus(null);
+
+            }
+
+            return servicesService.findAllServicesWithPageInfo1(pageNo, pageSize, services);
+
+        }
+
     }
 
     //跳转到添加业务账号页面
@@ -42,6 +54,7 @@ public class ServiceController {
     public String addService() {
 
         return "service/service_add";
+
     }
 
     //添加一条业务账号
@@ -72,7 +85,7 @@ public class ServiceController {
 
         services.setCreateDate((new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(new Date())));
 
-        services.setPauseDate(null);
+        services.setPauseDate("0000-00-00");
 
         servicesService.updateByPrimaryKeySelective(services);
 

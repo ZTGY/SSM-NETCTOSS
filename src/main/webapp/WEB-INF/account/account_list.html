@@ -209,13 +209,18 @@
 
         //获取全部信息用来显示全部,显示的为第一页的数据
         function getAllMessage() {
+
             $.ajax({
+
                 url: "/account_pageInfo",
+
                 data: {
 
                     pageNo: null,
 
-                    pageSize: 3
+                    pageSize: 3,
+
+                    flag: 0
                 },
                 success: function (result) {
 
@@ -228,7 +233,7 @@
                         addNewTr(domEle);
 
                     });
-                    pageInfo(result);
+                    pageInfo(result, 0);
                 }
             });
         }
@@ -236,11 +241,11 @@
         getAllMessage();
 
 
-        function pageInfo(result) {
+        function pageInfo(result, flag) {
 
 
             //添加首页
-            var firstPage = $("<a></a>").html("首页").attr("num", result.firstPage).click(currentPage);
+            var firstPage = $("<a></a>").html("首页").attr("num", result.firstPage).attr("flag", flag).click(currentPage);
 
             $("#page").append(firstPage);
 
@@ -248,14 +253,14 @@
 
             if (result.isFirstPage) {
 
-                var prePage = $("<a></a>").html("上一页");
+                var prePage = $("<a></a>").html("上一页").attr("flag", flag);
 
             }
             else {
 
                 var preNo = result.prePage;
 
-                var prePage = $("<a></a>").html("上一页").attr("num", preNo).click(currentPage);
+                var prePage = $("<a></a>").html("上一页").attr("num", preNo).attr("flag", flag).click(currentPage);
 
             }
 
@@ -264,7 +269,7 @@
             //添加页数
             for (var i = 0; i < result.pages; i++) {
 
-                var pageNumber = $("<a href='###'></a>").click(currentPage).attr("num", i + 1).html(i + 1);
+                var pageNumber = $("<a href='###'></a>").click(currentPage).attr("flag", flag).attr("num", i + 1).html(i + 1);
 
                 if ((i + 1) == result.pageNum) {
 
@@ -280,21 +285,20 @@
 
             if (result.isLastPage) {
 
-                var nextPage = $("<a></a>").html("下一页");
-
+                var nextPage = $("<a></a>").html("下一页").attr("flag", flag);
 
             } else {
 
                 var nextNo = result.nextPage;
 
-                var nextPage = $("<a></a>").html("下一页").attr("num", nextNo).click(currentPage);
+                var nextPage = $("<a></a>").html("下一页").attr("num", nextNo).attr("flag", flag).click(currentPage);
             }
 
             $("#page").append(nextPage);
 
             //添加尾页
 
-            var lastPage = $("<a></a>").html("尾页").attr("num", result.lastPage).click(currentPage);
+            var lastPage = $("<a></a>").html("尾页").attr("num", result.lastPage).attr("flag", flag).click(currentPage);
 
             $("#page").append(lastPage);
         }
@@ -303,12 +307,26 @@
 
             var pageNo = $(this).attr("num");
 
+            var flag = $(this).attr("flag");
+
             $.ajax({
+
                 url: "/account_pageInfo",
+
                 data: {
                     pageNo: pageNo,
 
-                    pageSize: 3
+                    pageSize: 3,
+
+                    idcardNo: $("#idcardNo").val(),
+
+                    realName: $("#realName").val(),
+
+                    loginName: $("#loginName").val(),
+
+                    status: $("#status").val(),
+
+                    flag: flag
 
                 },
                 success: function (result) {
@@ -322,37 +340,50 @@
                         addNewTr(domEle);
                     });
 
-                    pageInfo(result);
+                    pageInfo(result, flag);
                 }
             });
-
         }
 
-        $(function () {
-            $("#btn").click(function () {
-                $.ajax({
-                    url: "/account_pageInfo1",
-                    data: {
-                        pageNo: 1,
-                        pageSize: 3,
-                        idcardNo: $("#idcardNo").val(),
-                        realName: $("#realName").val(),
-                        loginName: $("#loginName").val(),
-                        status: $("#status").val()
-                    },
-                    success: function (result) {
-                        $(".trob").children().remove();
+        //模糊查询
+        function fuzzySearch() {
 
-                        $("#page").children().remove();
+            $.ajax({
 
-                        $.each(result.list, function (index, domEle) {
-                            addNewTr(domEle);
-                        });
-                        pageInfo(result);
-                    }
-                })
+                url: "/account_pageInfo",
+
+                data: {
+                    pageNo: 1,
+
+                    pageSize: 3,
+
+                    idcardNo: $("#idcardNo").val(),
+
+                    realName: $("#realName").val(),
+
+                    loginName: $("#loginName").val(),
+
+                    status: $("#status").val(),
+
+                    flag: 1
+                },
+                success: function (result) {
+
+                    $(".trob").children().remove();
+
+                    $("#page").children().remove();
+
+                    console.log(result);
+
+                    $.each(result.list, function (index, domEle) {
+
+                        addNewTr(domEle);
+                    });
+
+                    pageInfo(result, 1);
+                }
             })
-        })
+        }
     </script>
 </head>
 <body>
@@ -395,7 +426,7 @@
                 <option value="删除">删除</option>
             </select>
         </div>
-        <div><input type="button" value="搜索" class="btn_search" id="btn"/></div>
+        <div><input type="button" value="搜索" class="btn_search" onclick="fuzzySearch()"/></div>
         <input type="button" value="增加" class="btn_add" onclick="location.href='/account_add';"/>
     </div>
     <!--删除等的操作提示-->

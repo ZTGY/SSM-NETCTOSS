@@ -5,6 +5,46 @@
         <title></title>
         <link type="text/css" rel="stylesheet" media="all" href="../../styles/global.css" />
         <link type="text/css" rel="stylesheet" media="all" href="../../styles/global_color.css" />
+        <script src="/js/jquery-3.2.1.js"></script>
+        <script type="text/javascript">
+
+            function getServiceMsg() {
+
+                $.ajax({
+
+                    url: "/service_detail2",
+
+                    success: function (result) {
+                        $("#serviceId").val(result.data.serviceId)
+                        $("#accountId").val(result.data.accountId)
+                        $("#realName").val(result.data.account.realName)
+                        $("#idcardNo").val(result.data.account.idcardNo)
+                        $("#unixHost").val(result.data.unixHost)
+                        $("#osUsername").val(result.data.osUsername)
+                        $("#status").append("<option>" + result.data.status + "</option>");
+                        $("#createDate").val(result.data.createDate)
+                        $("#costId").val(result.data.costId)
+                        $("#name").val(result.data.cost.name)
+                        $("#descr").val(result.data.cost.descr)
+                    }
+                })
+
+            }
+
+            getServiceMsg();
+
+            //用来显示当前用户姓名
+            function getUsername() {
+                $.ajax({
+                    url: "/showName",
+                    success: function (result) {
+                        $("#username").html(result.data.name);
+                    }
+                })
+            }
+            getUsername();
+
+        </script>
     </head>
     <body>
         <!--Logo区域开始-->
@@ -48,9 +88,7 @@
                 <div class="text_info clearfix"><span>状态：</span></div>
                 <div class="input_info">
                     <select disabled id="status">
-                        <option value="开通">开通</option>
-                        <option value="暂停">暂停</option>
-                        <option value="删除">删除</option>
+
                     </select>                        
                 </div>
                 <div class="text_info clearfix"><span>开通时间：</span></div>

@@ -21,4 +21,6 @@ public interface AccountMapper {
     List<Account> findAll();
 
     List<Account> findAllBySearch(Account account);
+
+    Account selectByIdcardNo(String idcardNo);
 }
