@@ -26,4 +26,6 @@ public interface CostMapper {
     List<Cost> findAllByTimeAsc();
 
     List<Cost> findAllByTimeDesc();
+
+    List<Cost> findAllCosts();
 }

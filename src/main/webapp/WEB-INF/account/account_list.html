@@ -118,6 +118,10 @@
 
                         $("#start" + accountId).val("暂停").attr("class", "btn_pause");
 
+                        $("#modify" + accountId).remove();
+
+                        $("#delete" + accountId).remove();
+
                     }
                 });
 
@@ -149,6 +153,10 @@
                         $("#status" + accountId).html(result.data.status);
 
                         $("#pause" + accountId).val("开通").attr("class", "btn_start");
+
+                        $("<input type='button' value='修改' class='btn_modify'/>").click(accountModify).attr("num", accountId).appendTo( $("#pause" + accountId).parent());
+
+                        $("<input type='button' value='删除' class='btn_delete'/>").click(deleteAccount).attr("num", accountId).appendTo( $("#pause" + accountId).parent());
                     }
                 });
 
@@ -188,13 +196,13 @@
             }
             if (msg.status == "暂停") {
 
-                var tdmodify = $("<input type='button' value='修改' class='btn_modify'/>").click(accountModify).attr("num", msg.accountId);
+                var tdmodify = $("<input type='button' value='修改' class='btn_modify'/>").click(accountModify).attr("num", msg.accountId).attr("id","modify"+msg.accountId);
 
             }
 
             if (msg.status == "暂停") {
 
-                var tddelete = $("<input type='button' value='删除' class='btn_delete'/>").click(deleteAccount).attr("num", msg.accountId);
+                var tddelete = $("<input type='button' value='删除' class='btn_delete'/>").click(deleteAccount).attr("num", msg.accountId).attr("id","delete"+msg.accountId);
 
             }
 

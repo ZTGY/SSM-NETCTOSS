@@ -21,5 +21,5 @@ public interface ServicesService {
 
     PageInfo<Services> findAllServicesWithPageInfo(Integer pageNo, Integer pageSize);
 
-    PageInfo<Services> findAllServicesWithPageInfo1(Integer pageNo, Integer pageSize, Services services);
+    PageInfo<Services> findAllServicesWithPageInfo1(Integer pageNo, Integer pageSize, String osUsername,String unixHost,String idcardNo,String status);
 }

@@ -35,14 +35,14 @@
       SELECT <include refid="Base_Column_List" />
       FROM service
       <where>
-        <if test="osUsername != null and osUsername != ''">
-          AND os_username = #{osUsername}
+        <if test="osUsername != null and osUsername != '' ">
+          AND os_username LIKE CONCAT('%', #{osUsername},'%')
         </if>
-        <if test="unixHost != null and unixHost != ''">
+        <if test="unixHost != null and unixHost != '' ">
           AND unix_host LIKE CONCAT('%', #{unixHost},'%')
         </if>
-        <if test="idcardNo != null and idcardNo != ''">
-          AND idcardNo LIKE CONCAT('%', #{idcardNo},'%')
+        <if test="idcardNo != null and idcardNo != '' ">
+          AND account_id IN (SELECT account_id FROM account WHERE idcard_no = #{idcardNo})
         </if>
         <if test="status != null and status != ''">
           AND status = #{status}

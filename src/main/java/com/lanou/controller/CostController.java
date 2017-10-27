@@ -9,11 +9,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 
 /**
@@ -157,9 +159,19 @@ public class CostController {
     @ResponseBody
     @RequestMapping(value = "/pageInfo")
 
-    public PageInfo<Cost> costList(@RequestParam("pageNo") Integer pageNo, @RequestParam("pageSize") Integer pageSize,@RequestParam("flag")Integer flag) {
+    public PageInfo<Cost> costList(@RequestParam("pageNo") Integer pageNo, @RequestParam("pageSize") Integer pageSize, @RequestParam("flag") Integer flag) {
 
-        return costService.findWithPageInfo(pageNo, pageSize,flag);
+        return costService.findWithPageInfo(pageNo, pageSize, flag);
+    }
+
+    //获取全部资费类型
+    @ResponseBody
+    @RequestMapping(value = "/findAllCosts")
+    public AjaxResult costs() {
+
+        List<Cost> allCosts = costService.findAllCosts();
+
+        return new AjaxResult(allCosts);
     }
 
 }

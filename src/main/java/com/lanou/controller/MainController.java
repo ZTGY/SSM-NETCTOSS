@@ -9,11 +9,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 public class MainController {
 
-    @RequestMapping(value = "/role_list")
-    public String roleManager() {
-
-        return "role/role_list";
-    }
 
     @RequestMapping(value = "/admin_list")
     public String adminManager() {

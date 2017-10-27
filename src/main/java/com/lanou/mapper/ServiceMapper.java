@@ -1,6 +1,7 @@
 package com.lanou.mapper;
 
 import com.lanou.bean.Services;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -19,5 +20,5 @@ public interface ServiceMapper {
 
     List<Services> findAll();
 
-    List<Services> findAllBySearch(Services services);
+    List<Services> findAllBySearch(@Param("osUsername")String osUsername ,@Param("unixHost")String unixHost ,@Param("idcardNo")String idcardNo,@Param("status") String status);
 }

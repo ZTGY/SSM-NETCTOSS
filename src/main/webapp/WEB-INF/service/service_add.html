@@ -32,7 +32,6 @@
                 }
             })
         }
-
         getUsername();
     </script>
 </head>
@@ -84,7 +83,6 @@
             <option value="包20小时">包 20 小时</option>
             <option value="包40小时">包 40 小时</option>
             <option value="包60小时">包 60 小时</option>
-            <option value="包月">包月</option>
         </select>
     </div>
     <div class="text_info clearfix"><span>服务器 IP：</span></div>
@@ -109,7 +107,7 @@
     <div class="input_info">
         <input type="password" id="loginPasswd2"/>
         <span class="required">*</span>
-        <div class="validate_msg_long">两次密码必须相同</div>
+        <div class="validate_msg_long" id="div" style="color: red"></div>
     </div>
     <!--操作按钮-->
     <div class="button_info clearfix">
@@ -131,34 +129,58 @@
             data: {
                 idcardNo: $("#idcardNo").val()
             },
-            success:function (result) {
-
+            success: function (result) {
+                $("#accountId").val(result.data.loginName).attr("num", result.data.accountId);
             }
         })
 
     });
+    function getAllCostTypes() {
+        $.ajax({
+
+            url: "/findAllCosts",
+
+            success: function (result) {
+
+                console.log(result.data);
+
+                $.each(result.data, function (index, domEle) {
+
+                    $("#costType").append("<option>" + domEle.name + "</option>").attr("num",domEle.costId);
+                });
+
+            }
+        })
+    }
+    getAllCostTypes();
+
     $("#sub").click(function () {
         $.ajax({
+
             url: "/service_add1",
+
             data: {
-                idcardNo: $("#idcardNo").val(),
-                accountId: $("#accountId").val(),
-                costType:$("#costType").val(),
-                unixHost:$("#unixHost").val(),
-                osUsername:$("#osUsername").val(),
-                loginPasswd:$("#loginPasswd").val(),
-                loginPasswd2:$("#loginPasswd2").val()
+                accountId: $("#accountId").attr("num"),
+                costId: $("#costType").attr("num"),
+                unixHost: $("#unixHost").val(),
+                osUsername: $("#osUsername").val(),
+                loginPasswd: $("#loginPasswd").val(),
+                loginPasswd2: $("#loginPasswd2").val()
             },
             success: function (result) {
 
                 //保存结果的提示
 
-                if (result) {
+                if (result.data == 1) {
 
                     showResultDiv(true);
 
                     window.location.href = "/service_list";
-                } else {
+                }
+                if (result.data == 2) {
+                    $("#div").html("两次密码必须相同");
+                }
+                if (result.data == 3) {
 
                     window.setTimeout("showResultDiv(false);", 3000);
 

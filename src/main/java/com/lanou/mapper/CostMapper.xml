@@ -48,8 +48,12 @@
     SELECT <include refid="Base_Column_List" />
     FROM cost ORDER BY base_duration DESC
   </select>
+    <select id="findAllCosts" resultMap="BaseResultMap">
+      SELECT <include refid="Base_Column_List" />
+      FROM cost
+    </select>
 
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from cost
     where cost_id = #{costId,jdbcType=INTEGER}
   </delete>

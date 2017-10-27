@@ -119,6 +119,10 @@
 
                         $("#start" + serviceId).val("暂停").attr("class", "btn_pause");
 
+                        $("#modify" + serviceId).remove();
+
+                        $("#delete" + serviceId).remove();
+
                     }
                 });
 
@@ -149,6 +153,10 @@
                         $("#status" + serviceId).html(result.data.status);
 
                         $("#pause" + serviceId).val("开通").attr("class", "btn_start");
+
+                        $("<input type='button' value='修改' class='btn_modify'/>").click(serviceModify).attr("num", serviceId).appendTo( $("#pause" + serviceId).parent());
+
+                        $("<input type='button' value='删除' class='btn_delete'/>").click(deleteService).attr("num", serviceId).appendTo( $("#pause" + serviceId).parent());
                     }
                 });
 
@@ -189,13 +197,13 @@
             }
             if (msg.status == "暂停") {
 
-                var tdmodify = $("<input type='button' value='修改' class='btn_modify'/>").click(serviceModify).attr("num", msg.serviceId);
+                var tdmodify = $("<input type='button' value='修改' class='btn_modify'/>").click(serviceModify).attr("num", msg.serviceId).attr("id","modify"+msg.serviceId);
 
             }
 
             if (msg.status == "暂停") {
 
-                var tddelete = $("<input type='button' value='删除' class='btn_delete'/>").click(deleteService).attr("num", msg.serviceId);
+                var tddelete = $("<input type='button' value='删除' class='btn_delete'/>").click(deleteService).attr("num", msg.serviceId).attr("id","delete"+msg.serviceId);
 
             }
 
@@ -372,7 +380,7 @@
 
                     $(".trob").children().remove();
 
-                    $("#page").children().remove();
+                    $("#pages").children().remove();
 
                     console.log(result);
 

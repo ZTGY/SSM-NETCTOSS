@@ -18,13 +18,24 @@
                 else
                     divResult.style.display = "none";
             }
+            //用来显示当前用户姓名
+            function getUsername() {
+                $.ajax({
+                    url: "/showName",
+                    success: function (result) {
+                        $("#username").html(result.data.name);
+                    }
+                })
+            }
+            getUsername();
         </script>
     </head>
     <body>
         <!--Logo区域开始-->
         <div id="header">
             <img src="../../images/logo.png" alt="logo" class="left"/>
-            <a href="#">[退出]</a>            
+            当前用户: <span id="username"></span>&nbsp;
+            <a href="/quit">[退出]</a>
         </div>
         <!--Logo区域结束-->
         <!--导航区域开始-->

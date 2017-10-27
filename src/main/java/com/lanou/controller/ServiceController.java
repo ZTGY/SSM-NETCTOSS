@@ -1,7 +1,11 @@
 package com.lanou.controller;
 
 import com.github.pagehelper.PageInfo;
+import com.lanou.bean.Account;
+import com.lanou.bean.Cost;
 import com.lanou.bean.Services;
+import com.lanou.service.AccountService;
+import com.lanou.service.CostService;
 import com.lanou.service.ServicesService;
 import com.lanou.utils.AjaxResult;
 import org.springframework.stereotype.Controller;
@@ -23,6 +27,7 @@ public class ServiceController {
     @Resource
     private ServicesService servicesService;
 
+
     //跳转到显示全部业务账号页面
     @RequestMapping(value = "/service_list")
     public String service() {
@@ -32,18 +37,20 @@ public class ServiceController {
     //获取分页信息,显示全部业务账号
     @ResponseBody
     @RequestMapping(value = "/service_PageInfo")
-    public PageInfo<Services> serviceList(@RequestParam("pageNo") Integer pageNo, @RequestParam("pageSize") Integer pageSize,Services services,Integer flag) {
+    public PageInfo<Services> serviceList(@RequestParam("pageNo") Integer pageNo, @RequestParam("pageSize") Integer pageSize,
+                                          @RequestParam(value="osUsername", required = false)String osUsername,@RequestParam(value="unixHost", required = false)String unixHost,
+                                          @RequestParam(value="idcardNo", required = false)String idcardNo,@RequestParam(value = "status",required = false)String status, Integer flag) {
 
         if (flag == 0) {
-             return servicesService.findAllServicesWithPageInfo(pageNo, pageSize);
+            return servicesService.findAllServicesWithPageInfo(pageNo, pageSize);
         } else {
-            if (services.getStatus().equals("全部")) {
+            if (status.equals("全部")) {
 
-                services.setStatus(null);
+                status = null;
 
             }
 
-            return servicesService.findAllServicesWithPageInfo1(pageNo, pageSize, services);
+            return servicesService.findAllServicesWithPageInfo1(pageNo, pageSize, osUsername,unixHost,idcardNo,status);
 
         }
 
@@ -60,7 +67,13 @@ public class ServiceController {
     //添加一条业务账号
     @ResponseBody
     @RequestMapping(value = "/service_add1")
-    public AjaxResult addService1(Services services) {
+    public AjaxResult addService1(Services services,@RequestParam("loginPasswd2")String loginPasswd2) {
+
+        if(!services.getLoginPasswd().equals(loginPasswd2)){
+
+            return new AjaxResult(2);
+        }
+
         services.setStatus("开通");
         //设置日期的创建格式
         services.setCreateDate((new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(new Date())));
@@ -68,9 +81,9 @@ public class ServiceController {
         int i = servicesService.insertSelective(services);
 
         if (i > 0) {
-            return new AjaxResult(true);
+            return new AjaxResult(1);
         } else {
-            return new AjaxResult(false);
+            return new AjaxResult(3);
         }
     }
 

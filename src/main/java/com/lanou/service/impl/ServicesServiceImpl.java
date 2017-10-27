@@ -65,7 +65,7 @@ public class ServicesServiceImpl implements ServicesService {
     }
 
     @Override
-    public PageInfo<Services> findAllServicesWithPageInfo1(Integer pageNo, Integer pageSize, Services services) {
+    public PageInfo<Services> findAllServicesWithPageInfo1(Integer pageNo, Integer pageSize, String osUsername,String unixHost,String idcardNo,String status) {
 
         pageNo = pageNo == null ? 1 : pageNo;
 
@@ -73,7 +73,7 @@ public class ServicesServiceImpl implements ServicesService {
 
         PageHelper.startPage(pageNo, pageSize);
 
-        List<Services> servicesList = serviceMapper.findAllBySearch(services);
+        List<Services> servicesList = serviceMapper.findAllBySearch(osUsername ,unixHost,idcardNo,status);
 
         PageInfo<Services> pageInfo = new PageInfo<Services>(servicesList);
 
