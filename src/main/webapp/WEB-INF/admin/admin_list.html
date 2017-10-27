@@ -40,7 +40,8 @@
         <!--Logo区域开始-->
         <div id="header">
             <img src="../../images/logo.png" alt="logo" class="left"/>
-            <a href="#">[退出]</a>            
+            当前用户: <span id="username"></span>&nbsp;
+            <a href="/quit">[退出]</a>
         </div>
         <!--Logo区域结束-->
         <!--导航区域开始-->
@@ -124,161 +125,13 @@
                                 <input type="button" value="删除" class="btn_delete" onclick="deleteAdmin();" />
                             </td>
                         </tr>
-                        <tr>
-                            <td><input type="checkbox" /></td>
-                            <td>2</td>
-                            <td>贾强</td>
-                            <td>admin</td>
-                            <td>13077332357</td>
-                            <td>jiaqiang123@qq.com.cn</td>
-                            <td>2011-31-12</td>
-                            <td>
-                                <a class="summary"  onmouseover="showDetail(true,this);" onmouseout="showDetail(false,this);">超级管理员...</a>
-                                <!--浮动的详细信息-->
-                                <div class="detail_info">
-                                    超级管理员，角色管理员
-                                </div>
-                            </td>
-                            <td class="td_modi">
-                                <input type="button" value="修改" class="btn_modify" />
-                                <input type="button" value="删除" class="btn_delete" onclick="deleteAdmin();" />
-                            </td>
-                        </tr>
-                        <tr>
-                            <td><input type="checkbox" /></td>
-                            <td>3</td>
-                            <td>贾强</td>
-                            <td>admin</td>
-                            <td>13077332357</td>
-                            <td>jiaqiang123@qq.com.cn</td>
-                            <td>2011-31-12</td>
-                            <td>
-                                <a class="summary"  onmouseover="showDetail(true,this);" onmouseout="showDetail(false,this);">超级管理员...</a>
-                                <!--浮动的详细信息-->
-                                <div class="detail_info">
-                                    超级管理员，角色管理员，账单管理员，报表管理员，业务账号管理员，账务账号管理员
-                                </div>
-                            </td>
-                            <td class="td_modi">
-                                <input type="button" value="修改" class="btn_modify" />
-                                <input type="button" value="删除" class="btn_delete" />
-                            </td>
-                        </tr>
-                        <tr>
-                            <td><input type="checkbox" /></td>
-                            <td>4</td>
-                            <td>贾强</td>
-                            <td>admin</td>
-                            <td>13077332357</td>
-                            <td>jiaqiang123@qq.com.cn</td>
-                            <td>2011-31-12</td>
-                            <td>
-                                <a class="summary"  onmouseover="showDetail(true,this);" onmouseout="showDetail(false,this);">超级管理员</a>
-                                <!--浮动的详细信息-->
-                                <div class="detail_info">
-                                    超级管理员
-                                </div>
-                            </td>
-                            <td class="td_modi">
-                                <input type="button" value="修改" class="btn_modify" />
-                                <input type="button" value="删除" class="btn_delete" />
-                            </td>
-                        </tr>
-                        <tr>
-                            <td><input type="checkbox" /></td>
-                            <td>5</td>
-                            <td>贾强</td>
-                            <td>admin</td>
-                            <td>13077332357</td>
-                            <td>jiaqiang123@qq.com.cn</td>
-                            <td>2011-31-12</td>
-                            <td>超级管理员</td>
-                            <td class="td_modi">
-                                <input type="button" value="修改" class="btn_modify" />
-                                <input type="button" value="删除" class="btn_delete" />
-                            </td>
-                        </tr>
-                        <tr>
-                            <td><input type="checkbox" /></td>
-                            <td>6</td>
-                            <td>贾强</td>
-                            <td>admin</td>
-                            <td>13077332357</td>
-                            <td>jiaqiang123@qq.com.cn</td>
-                            <td>2011-31-12</td>
-                            <td>超级管理员</td>
-                            <td class="td_modi">
-                                <input type="button" value="修改" class="btn_modify" />
-                                <input type="button" value="删除" class="btn_delete" />
-                            </td>
-                        </tr>
-                        <tr>
-                            <td><input type="checkbox" /></td>
-                            <td>7</td>
-                            <td>贾强</td>
-                            <td>admin</td>
-                            <td>13077332357</td>
-                            <td>jiaqiang123@qq.com.cn</td>
-                            <td>2011-31-12</td>
-                            <td>超级管理员</td>
-                            <td class="td_modi">
-                                <input type="button" value="修改" class="btn_modify" />
-                                <input type="button" value="删除" class="btn_delete" />
-                            </td>
-                        </tr>
-                        <tr>
-                            <td><input type="checkbox" /></td>
-                            <td>8</td>
-                            <td>贾强</td>
-                            <td>admin</td>
-                            <td>13077332357</td>
-                            <td>jiaqiang123@qq.com.cn</td>
-                            <td>2011-31-12</td>
-                            <td>超级管理员</td>
-                            <td class="td_modi">
-                                <input type="button" value="修改" class="btn_modify" />
-                                <input type="button" value="删除" class="btn_delete" />
-                            </td>
-                        </tr>
-                        <tr>
-                            <td><input type="checkbox" /></td>
-                            <td>9</td>
-                            <td>贾强</td>
-                            <td>admin</td>
-                            <td>13077332357</td>
-                            <td>jiaqiang123@qq.com.cn</td>
-                            <td>2011-31-12</td>
-                            <td>超级管理员</td>
-                            <td class="td_modi">
-                                <input type="button" value="修改" class="btn_modify" />
-                                <input type="button" value="删除" class="btn_delete" />
-                            </td>
-                        </tr>
-                        <tr>
-                            <td><input type="checkbox" /></td>
-                            <td>10</td>
-                            <td>贾强</td>
-                            <td>admin</td>
-                            <td>13077332357</td>
-                            <td>jiaqiang123@qq.com.cn</td>
-                            <td>2011-31-12</td>
-                            <td>超级管理员</td>
-                            <td class="td_modi">
-                                <input type="button" value="修改" class="btn_modify" />
-                                <input type="button" value="删除" class="btn_delete" />
-                            </td>
-                        </tr>
+
+
                     </table>
                 </div>
                 <!--分页-->
                 <div id="pages">
-        	        <a href="#">上一页</a>
-                    <a href="#" class="current_page">1</a>
-                    <a href="#">2</a>
-                    <a href="#">3</a>
-                    <a href="#">4</a>
-                    <a href="#">5</a>
-                    <a href="#">下一页</a>
+
                 </div>                    
             </form>
         </div>

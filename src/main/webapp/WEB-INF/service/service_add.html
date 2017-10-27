@@ -148,13 +148,14 @@
 
                     $("#costType").append("<option>" + domEle.name + "</option>").attr("num",domEle.costId);
                 });
-
             }
         })
     }
+
     getAllCostTypes();
 
     $("#sub").click(function () {
+
         $.ajax({
 
             url: "/service_add1",

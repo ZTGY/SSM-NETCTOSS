@@ -1,145 +1,305 @@
-﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-        <title></title>
-        <link type="text/css" rel="stylesheet" media="all" href="../../styles/global.css" />
-        <link type="text/css" rel="stylesheet" media="all" href="../../styles/global_color.css" />
-        <script language="javascript" type="text/javascript">
-            function deleteRole() {
-                var r = window.confirm("确定要删除此角色吗？");
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link type="text/css" rel="stylesheet" media="all" href="../../styles/global.css"/>
+    <link type="text/css" rel="stylesheet" media="all" href="../../styles/global_color.css"/>
+    <script src="/js/jquery-3.2.1.js"></script>
+    <script language="javascript" type="text/javascript">
+        //删除角色
+        function deleteRole() {
+
+            var r = window.confirm("确定要删除此角色吗？");
+
+            if (r) {
+
+                var roleId = $(this).attr("num");
+
+                $.ajax({
+
+                    url: "/delRole",
+
+                    data: {
+                        roleId: roleId
+                    },
+                    success: function (result) {
+
+                        alert(result.data);
+
+                        var roleId = result.data;
+
+                        $("#trname" + roleId).remove();
+
+                    }
+                });
                 document.getElementById("operate_result_info").style.display = "block";
             }
-            function addNewTr(msg) {
 
-                var tdleft = $("<td></td>").html(msg.roleId);
+        }
 
-                var tdleft1 = $("<td></td>").html(msg.name);
+        //跳转到/role_modify页面
+        function rolemodify() {
 
-                var tdleft2 = $("<td></td>").html(msg.moduleInfo.name);
+            var roleId = $(this).attr("num");
 
+            $.ajax({
 
-                if (msg.status == "暂停") {
+                url: "/role_modify",
 
-                    var tdmodify = $("<input type='button' value='修改' class='btn_modify'/>").click(roleModify).attr("num", msg.costId).attr("id","modify"+msg.costId);
+                data: {
+                    roleId: roleId
+                },
+                success: function () {
+                    window.location.href = "/role_modify1";
+                }
+            });
+        }
+
+        function addNewTr(msg) {
+
+            var tdleft = $("<td></td>").html(msg.roleId);
+
+            var tdleft1 = $("<td></td>").html(msg.name);
+
+            var tdleft2 = $("<td></td>");
+
+            for (var i = 0; i < msg.moduleInfoList.length; i++) {
+
+                tdleft2.append(msg.moduleInfoList[i].name);
+
+                if (i < msg.moduleInfoList.length - 1) {
+
+                    tdleft2.append(",");
+                }
+            }
+
+            var tdmodify = $("<input type='button' value='修改' class='btn_modify'/>").click(rolemodify).attr("num", msg.roleId).attr("id", "modify" + msg.roleId);
+
+            var tddelete = $("<input type='button' value='删除' class='btn_delete'/>").click(deleteRole).attr("num", msg.roleId).attr("id", "delete" + msg.roleId);
+
+            var tdright = $("<td></td>").append(tdmodify).append(tddelete);
+
+            var trob = $("<tr class='trob'></tr>").append(tdleft).append(tdleft1).append(tdleft2).append(tdright).attr("id", "trname" + msg.roleId);
+
+            $("#datalist").append(trob);
+
+        }
+
+        //获取全部信息用来显示全部,显示的为第一页的数据
+        function getAllMessage() {
+
+            $.ajax({
+
+                url: "/role_pageInfo",
+
+                data: {
+                    pageNo: null,
+
+                    pageSize: 3
+
+                },
+                success: function (result) {
+
+                    $(".trob").children().remove();
+
+                    $("#pages").children().remove();
+
+                    $.each(result.list, function (index, domEle) {
+
+                        addNewTr(domEle);
+                    });
+
+                    pageInfo(result);
+                }
+            });
+        }
+        getAllMessage();
+
+        function pageInfo(result) {
+
+            //添加上一页
+            if (result.isFirstPage) {
+
+                var prePage = $("<a></a>").html("上一页");
+
+            } else {
+
+                var preNo = result.prePage;
+
+                var prePage = $("<a></a>").html("上一页").attr("num", preNo).click(currentPage);
+
+            }
+            $("#pages").append(prePage);
+
+            //添加页数
+            for (var i = 0; i < result.pages; i++) {
+
+                var pageNumber = $("<a href='###'></a>").click(currentPage).attr("num", i + 1).html(i + 1);
+
+                if ((i + 1) == result.pageNum) {
+
+                    pageNumber.attr("class", "current_page");
 
                 }
 
-                if (msg.status == "暂停") {
+                $("#pages").append(pageNumber);
 
-                    var tddelete = $("<input type='button' value='删除' class='btn_delete'/>").click(deleteRole).attr("num", msg.costId).attr("id","delete"+msg.costId);
+            }
+
+            //添加下一页
+
+            if (result.isLastPage) {
+
+                var nextPage = $("<a></a>").html("下一页");
+
+            } else {
+
+                var nextNo = result.nextPage;
+
+                var nextPage = $("<a></a>").html("下一页").attr("num", nextNo).click(currentPage);
+            }
+
+            $("#pages").append(nextPage);
+        }
+
+        function currentPage() {
+
+            var pageNo = $(this).attr("num");
+
+            $.ajax({
+
+                url: "/role_pageInfo",
+
+                data: {
+                    pageNo: pageNo,
+
+                    pageSize: 3
+
+                },
+                success: function (result) {
+
+                    $(".trob").children().remove();
+
+                    $("#pages").children().remove();
+
+                    $.each(result.list, function (index, domEle) {
+
+                        addNewTr(domEle);
+                    });
+
+                    pageInfo(result);
                 }
-                var tdright = $("<td></td>").append(tdmodify).append(tddelete);
+            });
 
-                var trob = $("<tr class='trob'></tr>").append(tdleft).append(tdleft1).append(tdleft2).append(tdright).attr("id", "trname" + msg.costId);
+        }
 
-                $("#datalist").append(trob);
+        //用来显示当前用户姓名
+        function getUsername() {
+            $.ajax({
+                url: "/showName",
+                success: function (result) {
+                    $("#username").html(result.data.name);
+                }
+            })
+        }
+        getUsername();
+    </script>
+</head>
+<body>
+<!--Logo区域开始-->
+<div id="header">
+    <img src="../../images/logo.png" alt="logo" class="left"/>
+    当前用户: <span id="username"></span>&nbsp;
+    <a href="/quit">[退出]</a>
+</div>
+<!--Logo区域结束-->
+<!--导航区域开始-->
+<div id="navi">
+    <ul id="menu">
+        <li><a href="../index.html" class="index_off"></a></li>
+        <li><a href="/role_list" class="role_off"></a></li>
+        <li><a href="admin_list" class="admin_off"></a></li>
+        <li><a href="/fee_list" class="fee_off"></a></li>
+        <li><a href="/account_list" class="account_off"></a></li>
+        <li><a href="/service_list" class="service_off"></a></li>
+        <li><a href="/bill_list" class="bill_off"></a></li>
+        <li><a href="/report_list" class="report_off"></a></li>
+        <li><a href="/user_info" class="information_off"></a></li>
+        <li><a href="/user_modify_pwd" class="password_off"></a></li>
+    </ul>
+</div>
+<!--导航区域结束-->
+<!--主要区域开始-->
+<div id="main">
+    <!--查询-->
+    <div class="search_add">
+        <input type="button" value="增加" class="btn_add" onclick="location.href='/role_add';"/>
+    </div>
+    <!--删除的操作提示-->
+    <div id="operate_result_info" class="operate_success">
+        <img src="../../images/close.png" onclick="this.parentNode.style.display='none';"/>
+        删除成功！
+    </div> <!--删除错误！该角色被使用，不能删除。-->
+    <!--数据区域：用表格展示数据-->
+    <div id="data">
+        <table id="datalist">
+            <thead>
+            <th>角色 ID</th>
+            <th>角色名称</th>
+            <th class="width600">拥有的权限</th>
+            <th class="td_modi"></th>
+            </thead>
+            <tbody>
+            <tr>
+                <td>1</td>
+                <td>贾强</td>
+                <td>角色管理、管理员管理、资费管理、账务账号、业务账号、账单、报表</td>
+                <td>
+                    <input type="button" value="修改" class="btn_modify" onclick="location.href='role_modify.html';"/>
+                    <input type="button" value="删除" class="btn_delete" onclick="deleteRole();"/>
+                </td>
+            </tr>
+            <tr>
+                <td>1</td>
+                <td>贾强</td>
+                <td>超级管理员、账单管理员</td>
+                <td>
+                    <input type="button" value="修改" class="btn_modify"/>
+                    <input type="button" value="删除" class="btn_delete"/>
+                </td>
+            </tr>
+            <tr>
+                <td>1</td>
+                <td>贾强</td>
+                <td>超级管理员、账单管理员</td>
+                <td>
+                    <input type="button" value="修改" class="btn_modify"/>
+                    <input type="button" value="删除" class="btn_delete"/>
+                </td>
+            </tr>
+            <tr>
+                <td>1</td>
+                <td>贾强</td>
+                <td>超级管理员、账单管理员</td>
+                <td>
+                    <input type="button" value="修改" class="btn_modify"/>
+                    <input type="button" value="删除" class="btn_delete"/>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <!--分页-->
+    <div id="pages">
 
-            }
-
-            //用来显示当前用户姓名
-            function getUsername() {
-                $.ajax({
-                    url: "/showName",
-                    success: function (result) {
-                        $("#username").html(result.data.name);
-                    }
-                })
-            }
-            getUsername();
-        </script>
-    </head>
-    <body>
-        <!--Logo区域开始-->
-        <div id="header">
-            <img src="../../images/logo.png" alt="logo" class="left"/>
-            当前用户: <span id="username"></span>&nbsp;
-            <a href="/quit">[退出]</a>
-        </div>
-        <!--Logo区域结束-->
-        <!--导航区域开始-->
-        <div id="navi">
-            <ul id="menu">
-                <li><a href="../index.html" class="index_off"></a></li>
-                <li><a href="/role_list" class="role_off"></a></li>
-                <li><a href="admin_list" class="admin_off"></a></li>
-                <li><a href="/fee_list" class="fee_off"></a></li>
-                <li><a href="/account_list" class="account_off"></a></li>
-                <li><a href="/service_list" class="service_off"></a></li>
-                <li><a href="/bill_list" class="bill_off"></a></li>
-                <li><a href="/report_list" class="report_off"></a></li>
-                <li><a href="/user_info" class="information_off"></a></li>
-                <li><a href="/user_modify_pwd" class="password_off"></a></li>
-            </ul>
-        </div>
-        <!--导航区域结束-->
-        <!--主要区域开始-->
-        <div id="main">
-                <!--查询-->
-                <div class="search_add">
-                    <input type="button" value="增加" class="btn_add" onclick="location.href='/role_add';" />
-                </div>  
-                <!--删除的操作提示-->
-                <div id="operate_result_info" class="operate_success">
-                    <img src="../images/close.png" onclick="this.parentNode.style.display='none';" />
-                    删除成功！
-                </div> <!--删除错误！该角色被使用，不能删除。-->
-                <!--数据区域：用表格展示数据-->     
-                <div id="data">                      
-                    <table id="datalist">
-                        <tr>                            
-                            <th>角色 ID</th>
-                            <th>角色名称</th>
-                            <th class="width600">拥有的权限</th>
-                            <th class="td_modi"></th>
-                        </tr>                      
-                        <tr>
-                            <td>1</td>
-                            <td>贾强</td>
-                            <td>角色管理、管理员管理、资费管理、账务账号、业务账号、账单、报表</td>
-                            <td>
-                                <input type="button" value="修改" class="btn_modify" onclick="location.href='role_modi.html';"/>
-                                <input type="button" value="删除" class="btn_delete" onclick="deleteRole();" />
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>1</td>
-                            <td>贾强</td>
-                            <td>超级管理员、账单管理员</td>
-                            <td>
-                                <input type="button" value="修改" class="btn_modify" />
-                                <input type="button" value="删除" class="btn_delete" />
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>1</td>
-                            <td>贾强</td>
-                            <td>超级管理员、账单管理员</td>
-                            <td>
-                                <input type="button" value="修改" class="btn_modify" />
-                                <input type="button" value="删除" class="btn_delete" />
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>1</td>
-                            <td>贾强</td>
-                            <td>超级管理员、账单管理员</td>
-                            <td>
-                                <input type="button" value="修改" class="btn_modify" />
-                                <input type="button" value="删除" class="btn_delete" />
-                            </td>
-                        </tr>
-                    </table>
-                </div> 
-                <!--分页-->
-                <div id="pages">
-
-                </div>
-        </div>
-        <!--主要区域结束-->
-        <div id="footer">
-            <p>[源自北美的技术，最优秀的师资，最真实的企业环境，最适用的实战项目]</p>
-            <p>版权所有(C)云科技有限公司 </p>
-        </div>
-    </body>
+    </div>
+</div>
+<!--主要区域结束-->
+<div id="footer">
+    <p>[源自北美的技术，最优秀的师资，最真实的企业环境，最适用的实战项目]</p>
+    <p>版权所有(C)云科技有限公司 </p>
+</div>
+</body>
 </html>
