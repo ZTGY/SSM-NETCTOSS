@@ -68,7 +68,7 @@
 <div id="header">
     <img src="../../images/logo.png" alt="logo" class="left"/>
     当前用户: <span id="username"></span>&nbsp;
-    <a href="/quit" >[退出]</a>
+    <a href="/quit">[退出]</a>
 </div>
 <!--Logo区域结束-->
 <!--导航区域开始-->
@@ -76,8 +76,8 @@
     <ul id="menu">
         <li><a href="../index.html" class="index_off"></a></li>
         <li><a href="/role_list" class="role_off"></a></li>
-        <li><a href="admin_list" class="admin_off"></a></li>
-        <li><a href="/fee_list" class="fee_off"></a></li>
+        <li><a href="/admin_list" class="admin_off"></a></li>
+        <li><a href="/fee_list" class="fee_on"></a></li>
         <li><a href="/account_list" class="account_off"></a></li>
         <li><a href="/service_list" class="service_off"></a></li>
         <li><a href="/bill_list" class="bill_off"></a></li>
@@ -92,9 +92,9 @@
     <div id="save_result_info" class="save_fail">保存失败，资费名称重复！</div>
     <div class="text_info clearfix"><span>资费名称：</span></div>
     <div class="input_info">
-        <input type="text" class="width300" id="name"/>&nbsp;&nbsp;&nbsp;
+        <input type="text" class="width300" id="name"/>
         <span class="required">*</span>
-        <div class="validate_msg_short">50长度的字母、数字、汉字和下划线的组合</div>
+        <div class="validate_msg_short" id="div4">50长度的字母、数字、汉字和下划线的组合</div>
     </div>
     <div class="text_info clearfix"><span>资费类型：</span></div>
     <div class="input_info fee_type">
@@ -110,26 +110,26 @@
         <input type="text" id="baseDuration" class="width100"/>
         <span class="info">小时</span>
         <span class="required">*</span>
-        <div class="validate_msg_long">1-600之间的整数</div>
+        <div class="validate_msg_long" id="div0">1-600之间的整数</div>
     </div>
     <div class="text_info clearfix"><span>基本费用：</span></div>
     <div class="input_info">
         <input type="text" id="baseCost" class="width100"/>
         <span class="info">元</span>
         <span class="required">*</span>
-        <div class="validate_msg_long error_msg">0-99999.99之间的数值</div>
+        <div class="validate_msg_long" id="div1">0-99999.99之间的数值</div>
     </div>
     <div class="text_info clearfix"><span>单位费用：</span></div>
     <div class="input_info">
         <input type="text" id="unitCost" class="width100"/>
         <span class="info">元/小时</span>
         <span class="required">*</span>
-        <div class="validate_msg_long error_msg">0-99999.99之间的数值</div>
+        <div class="validate_msg_long" id="div2">0-99999.99之间的数值</div>
     </div>
     <div class="text_info clearfix"><span>资费说明：</span></div>
     <div class="input_info_high">
         <textarea class="width300 height70" id="descr"></textarea>
-        <div class="validate_msg_short error_msg">100长度的字母、数字、汉字和下划线的组合</div>
+        <div class="validate_msg_short" id="div3">100长度以内的字母、数字、汉字的组合</div>
     </div>
     <div class="button_info clearfix">
         <input type="submit" value="保存" class="btn_save" id="sub"/>
@@ -145,6 +145,50 @@
 </body>
 <script type="text/javascript">
     $("#sub").click(function () {
+
+        var obj = $("#name").val();
+
+        if(obj == ""|| ! new RegExp("^(?![0-9]+$)(?![a-z]+$)(?![A-Z]+$)(?![0-9a-z]+$)(?![0-9A-Z]+$)(?![a-zA-Z]+$)" + "[0-9A-Za-z]{0,50}$").test(obj)){
+
+            $("#div4").attr("class", "validate_msg_short error_msg");
+
+            return;
+        }
+
+        var obj0 = $("#baseDuration").val();
+
+        if (!Math.floor(obj0) === obj0 || obj0 < 1 || obj0 > 600 || obj0 == "") {
+
+            $("#div0").attr("class", "validate_msg_long error_msg");
+
+            return;
+        }
+        var obj1 = $("#baseCost").val();
+
+        if (!Math.floor(obj1) === obj1 || obj1 < 0 || obj1 > 99999.99 || obj1 == "") {
+
+            $("#div1").attr("class", "validate_msg_long error_msg");
+
+            return;
+        }
+        var obj2 = $("#unitCost").val();
+
+        if (!Math.floor(obj2) === obj2 || obj2 < 0 || obj2 > 99999.99 || obj2 == "") {
+
+            $("#div2").attr("class", "validate_msg_long error_msg");
+
+            return;
+        }
+
+        var obj3 = $("#descr").val();
+
+        if(obj3 == ""||! new RegExp("^(?![0-9]+$)(?![a-z]+$)(?![A-Z]+$)(?![0-9a-z]+$)(?![0-9A-Z]+$)(?![a-zA-Z]+$)" + "[0-9A-Za-z]{0,50}$").test(obj3)){
+
+            $("#div3").attr("class", "validate_msg_short error_msg");
+
+            return;
+        }
+
         $.ajax({
             url: "/addCost",
             data: {
@@ -173,5 +217,20 @@
         })
     });
 
+    $("#name").focus(function () {
+        $("#div4").attr("class", "validate_msg_short");
+    })
+    $("#baseDuration").focus(function () {
+        $("#div0").attr("class", "validate_msg_long");
+    })
+    $("#baseCost").focus(function () {
+        $("#div1").attr("class", "validate_msg_long");
+    })
+    $("#unitCost").focus(function () {
+        $("#div2").attr("class", "validate_msg_long");
+    })
+    $("#descr").focus(function () {
+        $("#div3").attr("class", "validate_msg_short");
+    })
 </script>
 </html>

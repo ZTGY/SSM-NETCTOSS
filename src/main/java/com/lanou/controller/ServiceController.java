@@ -1,10 +1,9 @@
 package com.lanou.controller;
 
 import com.github.pagehelper.PageInfo;
-import com.lanou.bean.Account;
 import com.lanou.bean.Cost;
 import com.lanou.bean.Services;
-import com.lanou.service.AccountService;
+
 import com.lanou.service.CostService;
 import com.lanou.service.ServicesService;
 import com.lanou.utils.AjaxResult;
@@ -26,6 +25,8 @@ import java.util.Date;
 public class ServiceController {
     @Resource
     private ServicesService servicesService;
+    @Resource
+    private CostService costService;
 
 
     //跳转到显示全部业务账号页面
@@ -38,8 +39,8 @@ public class ServiceController {
     @ResponseBody
     @RequestMapping(value = "/service_PageInfo")
     public PageInfo<Services> serviceList(@RequestParam("pageNo") Integer pageNo, @RequestParam("pageSize") Integer pageSize,
-                                          @RequestParam(value="osUsername", required = false)String osUsername,@RequestParam(value="unixHost", required = false)String unixHost,
-                                          @RequestParam(value="idcardNo", required = false)String idcardNo,@RequestParam(value = "status",required = false)String status, Integer flag) {
+                                          @RequestParam(value = "osUsername", required = false) String osUsername, @RequestParam(value = "unixHost", required = false) String unixHost,
+                                          @RequestParam(value = "idcardNo", required = false) String idcardNo, @RequestParam(value = "status", required = false) String status, Integer flag) {
 
         if (flag == 0) {
             return servicesService.findAllServicesWithPageInfo(pageNo, pageSize);
@@ -50,7 +51,7 @@ public class ServiceController {
 
             }
 
-            return servicesService.findAllServicesWithPageInfo1(pageNo, pageSize, osUsername,unixHost,idcardNo,status);
+            return servicesService.findAllServicesWithPageInfo1(pageNo, pageSize, osUsername, unixHost, idcardNo, status);
 
         }
 
@@ -67,9 +68,9 @@ public class ServiceController {
     //添加一条业务账号
     @ResponseBody
     @RequestMapping(value = "/service_add1")
-    public AjaxResult addService1(Services services,@RequestParam("loginPasswd2")String loginPasswd2) {
+    public AjaxResult addService1(Services services, @RequestParam("loginPasswd2") String loginPasswd2) {
 
-        if(!services.getLoginPasswd().equals(loginPasswd2)){
+        if (!services.getLoginPasswd().equals(loginPasswd2)) {
 
             return new AjaxResult(2);
         }
@@ -169,9 +170,15 @@ public class ServiceController {
 
     //修改一条业务账号
     @RequestMapping(value = "/updateService", method = RequestMethod.POST)
-    public String updateService(Services services) {
+    public String updateService(Services services,Cost cost) {
+
+        Cost cost1 = costService.selectByCostType(cost.getCostType());
+
+        services.setCost(cost1);
 
         servicesService.updateByPrimaryKeySelective(services);
+
+        System.out.println(services);
 
         return "service/service_list";
     }

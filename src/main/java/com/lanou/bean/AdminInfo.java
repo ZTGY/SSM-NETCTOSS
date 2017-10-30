@@ -1,24 +1,35 @@
 package com.lanou.bean;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author dllo
  */
 public class AdminInfo {
-    private Integer adminId;
+    private Integer adminId;//管理员id
 
-    private String adminCode;
+    private String adminCode;//管理员登录名
 
-    private String password;
+    private String password;//管理员密码
 
-    private String name;
+    private String name;//管理员名称
 
-    private String telephone;
+    private String telephone;//管理员电话
 
-    private String email;
+    private String email;//邮件
 
-    private Date enrolldate;
+    private String enrolldate;//授权日期
+
+    private List<RoleInfo> roleInfoList;
+
+    public List<RoleInfo> getRoleInfoList() {
+        return roleInfoList;
+    }
+
+    public void setRoleInfoList(List<RoleInfo> roleInfoList) {
+        this.roleInfoList = roleInfoList;
+    }
 
     public Integer getAdminId() {
         return adminId;
@@ -68,11 +79,11 @@ public class AdminInfo {
         this.email = email == null ? null : email.trim();
     }
 
-    public Date getEnrolldate() {
+    public String getEnrolldate() {
         return enrolldate;
     }
 
-    public void setEnrolldate(Date enrolldate) {
+    public void setEnrolldate(String enrolldate) {
         this.enrolldate = enrolldate;
     }
 
@@ -85,7 +96,8 @@ public class AdminInfo {
                 ", name='" + name + '\'' +
                 ", telephone='" + telephone + '\'' +
                 ", email='" + email + '\'' +
-                ", enrolldate=" + enrolldate +
+                ", enrolldate='" + enrolldate + '\'' +
+                ", roleInfoList=" + roleInfoList +
                 '}';
     }
 }

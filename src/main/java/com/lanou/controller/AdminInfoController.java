@@ -1,11 +1,15 @@
 package com.lanou.controller;
 
+import com.github.pagehelper.PageInfo;
 import com.lanou.bean.AdminInfo;
+import com.lanou.bean.ModuleInfo;
+import com.lanou.bean.RoleInfo;
 import com.lanou.service.AdminInfoService;
 import com.lanou.utils.AjaxResult;
 import com.lanou.utils.VerifyCode;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -15,6 +19,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 
 /**
@@ -27,6 +33,11 @@ public class AdminInfoController {
     @Resource
     private AdminInfoService adminInfoService;
 
+    @RequestMapping(value = "/admin_list")
+    public String adminManager() {
+
+        return "admin/admin_list";
+    }
 
     //用来跳转到登录页面
     @RequestMapping(value = "/login")
@@ -98,5 +109,109 @@ public class AdminInfoController {
 
         return "login";
     }
-    //
+
+    //显示全部信息并分页
+    @ResponseBody
+    @RequestMapping(value = "/admin_pageInfo")
+    public PageInfo<AdminInfo> adminInfoList(@RequestParam("pageNo") Integer pageNo, @RequestParam("pageSize") Integer pageSize,
+                                             @RequestParam(value = "moduleId", required = false) String moduleId, @RequestParam(value = "name", required = false) String name,
+                                             @RequestParam("flag") Integer flag) {
+        if (flag == 0) {
+            return adminInfoService.findAllAdminInfoWithPageInfo(pageNo, pageSize);
+        } else {
+
+            Integer moduleId1 = Integer.valueOf(moduleId);
+
+            return adminInfoService.findAllBySearch(pageNo, pageSize, moduleId1, name);
+        }
+    }
+
+    //跳转到添加角色页面
+    @RequestMapping(value = "/admin_add")
+    public String roleAdd() {
+
+        return "admin/admin_add";
+
+    }
+
+    //添加管理员
+    @ResponseBody
+    @RequestMapping(value = "/admin_add1", method = RequestMethod.POST)
+    public AjaxResult addAdmin(AdminInfo adminInfo, @RequestParam(value = "roleIds", required = false) Integer[] roleIds) {
+
+        adminInfo.setEnrolldate((new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(new Date())));
+
+        int i = adminInfoService.insertSelective(adminInfo);
+
+        for (Integer roleId : roleIds) {
+
+            adminInfoService.insertIntoAdminAndRole(adminInfo.getAdminId(), roleId);
+        }
+
+        if (i > 0) {
+            return new AjaxResult(true);
+        } else {
+            return new AjaxResult(false);
+        }
+
+    }
+
+
+    //查找当前所选的管理员对象
+    @ResponseBody
+    @RequestMapping(value = "/admin_modify")
+    public AjaxResult adminModify(@RequestParam("adminId") Integer adminId, HttpServletRequest request) {
+
+        AdminInfo adminInfo = adminInfoService.selectByPrimaryKey(adminId);
+
+        request.getSession().setAttribute("adminInfo", adminInfo);
+
+        return new AjaxResult(adminInfo);
+    }
+
+    //跳转到修改界面
+    @RequestMapping(value = "/admin_modify1")
+    public String adminModify1() {
+
+        return "admin/admin_modify";
+
+    }
+
+    //找到当前所选管理员对象用来回显
+    @ResponseBody
+    @RequestMapping(value = "/admin_modify2")
+    public AjaxResult feeModify2(HttpServletRequest request) {
+
+        AdminInfo adminInfo = (AdminInfo) request.getSession().getAttribute("adminInfo");
+
+        return new AjaxResult(adminInfo);
+    }
+
+    //修改一条数据
+    @RequestMapping(value = "/updateAdmin", method = RequestMethod.POST)
+    public String update(AdminInfo adminInfo, @RequestParam(value = "roleIds", required = false) Integer[] roleIds, HttpServletRequest request) {
+
+        AdminInfo adminInfo1 = (AdminInfo) request.getSession().getAttribute("adminInfo");
+
+        adminInfo.setAdminId(adminInfo1.getAdminId());
+
+        adminInfoService.updateByPrimaryKeySelective(adminInfo);
+
+        adminInfoService.deleteAdminAndRoleByAdminId(adminInfo1.getAdminId());
+
+        for (Integer roleId : roleIds) {
+
+            adminInfoService.insertIntoAdminAndRole(adminInfo.getAdminId(), roleId);
+        }
+
+        return "admin/admin_list";
+    }
+
+    //删除一条资费
+    @ResponseBody
+    @RequestMapping(value = "/delAdmin")
+    public AjaxResult deleteCost(@RequestParam("adminId") Integer adminId) {
+
+        return new AjaxResult(adminId);
+    }
 }

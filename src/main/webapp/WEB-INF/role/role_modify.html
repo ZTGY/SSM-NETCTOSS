@@ -43,7 +43,7 @@
 
                     $.each(result.data, function (index, domEle) {
 
-                        var li = $("<li></li>").append($("<input type='checkbox'/>").attr("id", "demo" + domEle.moduleId).attr("num",domEle.moduleId)).append(domEle.name);
+                        var li = $("<li></li>").append($("<input type='checkbox'/>").attr("num", domEle.moduleId)).append(domEle.name);
 
                         $("#ul").append(li);
                     })
@@ -68,17 +68,23 @@
 
                     $.each(result.data.moduleInfoList, function (index, domEle) {
 
-                        console.log(result.data.moduleInfoList);
-
-                        $("#demo" + domEle.moduleId).attr("checked","true")
+                        $("[num = '" + domEle.moduleId + "']:checkbox").attr("checked", true);
                     })
                 }
             })
         })
 
 
-
         function saveRole() {
+
+            var obj = $("#roleName").val();
+
+            if (obj == "") {
+
+                $("#div").attr("class", "validate_msg_tiny error_msg");
+
+                return;
+            }
 
             var s = "";
 
@@ -119,6 +125,9 @@
             });
         }
 
+        $("#roleName").blur(function () {
+            $("#div").attr("class", "validate_msg_tiny")
+        })
     </script>
 </head>
 <body>
@@ -133,8 +142,8 @@
 <div id="navi">
     <ul id="menu">
         <li><a href="../index.html" class="index_off"></a></li>
-        <li><a href="/role_list" class="role_off"></a></li>
-        <li><a href="admin_list" class="admin_off"></a></li>
+        <li><a href="/role_list" class="role_on"></a></li>
+        <li><a href="/admin_list" class="admin_off"></a></li>
         <li><a href="/fee_list" class="fee_off"></a></li>
         <li><a href="/account_list" class="account_off"></a></li>
         <li><a href="/service_list" class="service_off"></a></li>
@@ -154,7 +163,7 @@
         <div class="input_info">
             <input type="text" class="width200" id="roleName"/>
             <span class="required">*</span>
-            <div class="validate_msg_medium error_msg">不能为空，且为20长度的字母、数字和汉字的组合</div>
+            <div class="validate_msg_medium">不能为空，且为20长度的字母、数字和汉字的组合</div>
         </div>
         <div class="text_info clearfix"><span>设置权限：</span></div>
         <div class="input_info_high">
@@ -170,7 +179,7 @@
                 </ul>
             </div>
             <span class="required">*</span>
-            <div class="validate_msg_tiny">至少选择一个权限</div>
+            <div class="validate_msg_tiny" id="div">至少选择一个权限</div>
         </div>
         <div class="button_info clearfix">
             <input type="button" value="保存" class="btn_save" onclick="saveRole();"/>

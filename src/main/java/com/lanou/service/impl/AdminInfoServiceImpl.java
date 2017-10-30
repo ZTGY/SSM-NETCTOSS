@@ -1,11 +1,15 @@
 package com.lanou.service.impl;
 
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.lanou.bean.AdminInfo;
 import com.lanou.mapper.AdminInfoMapper;
 import com.lanou.service.AdminInfoService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * @author dllo
@@ -49,6 +53,51 @@ public class AdminInfoServiceImpl implements AdminInfoService {
     //通过用户名去数据库查找是否有相应的用户与之对应
     @Override
     public AdminInfo findByName(AdminInfo adminUser) {
+
         return adminInfoMapper.findByName(adminUser);
+    }
+
+    @Override
+    public PageInfo<AdminInfo> findAllAdminInfoWithPageInfo(Integer pageNo, Integer pageSize) {
+
+        pageNo = pageNo == null ? 1 : pageNo;
+
+        pageSize = pageSize == null ? 5 : pageSize;
+
+        PageHelper.startPage(pageNo, pageSize);
+
+        List<AdminInfo> adminInfos = adminInfoMapper.findAll();
+
+        PageInfo<AdminInfo> pageInfo = new PageInfo<>(adminInfos);
+
+        return pageInfo;
+
+    }
+
+    @Override
+    public PageInfo<AdminInfo> findAllBySearch(Integer pageNo, Integer pageSize,Integer moduleId,String name) {
+        pageNo = pageNo == null ? 1 : pageNo;
+
+        pageSize = pageSize == null ? 5 : pageSize;
+
+        PageHelper.startPage(pageNo, pageSize);
+
+        List<AdminInfo> adminInfos = adminInfoMapper.findAllBySearch(moduleId,name);
+
+        PageInfo<AdminInfo> pageInfo = new PageInfo<>(adminInfos);
+
+        return pageInfo;
+    }
+
+    @Override
+    public Integer insertIntoAdminAndRole(Integer adminId, Integer roleId) {
+
+        return adminInfoMapper.insertIntoAdminAndRole(adminId,roleId);
+    }
+
+    @Override
+    public Integer deleteAdminAndRoleByAdminId(Integer adminId) {
+
+        return adminInfoMapper.deleteAdminAndRoleByAdminId(adminId);
     }
 }

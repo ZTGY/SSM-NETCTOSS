@@ -27,15 +27,16 @@
     SELECT <include refid="Base_Column_List" />
     FROM role_info WHERE role_id IN (SELECT role_id FROM role_module WHERE module_id = #{moduleId})
   </select>
+  <select id="findRoleInfosByAdminId" resultMap="BaseResultMap">
+    SELECT <include refid="Base_Column_List" />
+    FROM role_info WHERE role_id IN (SELECT role_id FROM admin_role WHERE admin_id = #{adminId})
+  </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from role_info
     where role_id = #{roleId,jdbcType=INTEGER}
   </delete>
   <delete id="deleteRoleAndModuleByRoleId">
     DELETE FROM role_module WHERE role_id = #{roleId}
-  </delete>
-  <delete id="deleteRoleAndModuleByModlueId">
-    DELETE FROM role_module WHERE module_id = #{moduleId}
   </delete>
   <insert id="insert" parameterType="com.lanou.bean.RoleInfo">
     insert into role_info (role_id, name)

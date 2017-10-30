@@ -26,4 +26,6 @@ public interface CostService {
     PageInfo<Cost> findWithPageInfo(Integer pageNo,Integer pageSize,Integer flag);
 
     List<Cost> findAllCosts();
+
+    Cost selectByCostType(String costType);
 }

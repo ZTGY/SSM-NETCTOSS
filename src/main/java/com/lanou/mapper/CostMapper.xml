@@ -52,6 +52,10 @@
       SELECT <include refid="Base_Column_List" />
       FROM cost
     </select>
+    <select id="selectByCostType" resultMap="BaseResultMap">
+      SELECT <include refid="Base_Column_List" />
+      FROM cost WHERE cost_type = #{costType}
+    </select>
 
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from cost

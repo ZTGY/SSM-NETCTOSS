@@ -53,7 +53,9 @@
             if (r) {
                 var costId = $(this).attr("num");
                 $.ajax({
+
                     url: "/delCost",
+
                     data: {
                         costId: costId
                     },
@@ -267,7 +269,7 @@
         //排序按钮的点击事件
         function sort(btnObj) {
             if ($(btnObj).val() == "基费") {
-                if (btnObj.className == "sort_desc") {
+                if (btnObj.classNae == "sort_desc") {
                     btnObj.className = "sort_asc";
                     sort2(1);
                 } else {
@@ -332,8 +334,8 @@
     <ul id="menu">
         <li><a href="../index.html" class="index_off"></a></li>
         <li><a href="/role_list" class="role_off"></a></li>
-        <li><a href="admin_list" class="admin_off"></a></li>
-        <li><a href="/fee_list" class="fee_off"></a></li>
+        <li><a href="/admin_list" class="admin_off"></a></li>
+        <li><a href="/fee_list" class="fee_on"></a></li>
         <li><a href="/account_list" class="account_off"></a></li>
         <li><a href="/service_list" class="service_off"></a></li>
         <li><a href="/bill_list" class="bill_off"></a></li>

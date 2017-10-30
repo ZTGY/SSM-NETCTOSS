@@ -16,6 +16,8 @@ public interface RoleInfoMapper {
 
     List<RoleInfo> findRoleInfosByModuleId(Integer moduleId);
 
+    List<RoleInfo> findRoleInfosByAdminId(Integer adminId);
+
     int updateByPrimaryKeySelective(RoleInfo record);
 
     int updateByPrimaryKey(RoleInfo record);
@@ -26,5 +28,4 @@ public interface RoleInfoMapper {
 
     Integer deleteRoleAndModuleByRoleId(Integer roleId);
 
-    Integer deleteRoleAndModuleByModlueId(Integer moduleId);
 }

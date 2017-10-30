@@ -36,7 +36,7 @@ public class AccountController {
     @ResponseBody
     @RequestMapping(value = "/account_pageInfo")
 
-    public PageInfo<Account> accountList(@RequestParam("pageNo") Integer pageNo, @RequestParam("pageSize") Integer pageSize, Account account, Integer flag) {
+    public PageInfo<Account> accountList(@RequestParam("pageNo") Integer pageNo, @RequestParam("pageSize") Integer pageSize, Account account, @RequestParam("flag") Integer flag) {
 
         if (flag == 0) {
             return accountService.findWithPageInfo(pageNo, pageSize);
@@ -59,40 +59,37 @@ public class AccountController {
     //添加一条账号信息
     @ResponseBody
     @RequestMapping(value = "/account_add1")
-    public AjaxResult addAccount1(Account account, @RequestParam("loginPasswd2") String loginPasswd2, @RequestParam("recommenderIdcardNo") String recommenderIdcardNo) {
-
-        if (!new IDCard().Verify(account.getIdcardNo())) {
-            return new AjaxResult(1);
-        }
-        if (!account.getLoginName().matches("^(?![0-9]+$)(?![a-z]+$)(?![A-Z]+$)(?![0-9a-z]+$)(?![0-9A-Z]+$)(?![a-zA-Z]+$)" + "[0-9A-Za-z]{0,30}$")) {
-            return new AjaxResult(3);
-        }
-        if (!account.getLoginPasswd().matches("^(?![0-9]+$)(?![a-z]+$)(?![A-Z]+$)(?![0-9a-z]+$)(?![0-9A-Z]+$)(?![a-zA-Z]+$)" + "[0-9A-Za-z]{6,10}$")) {
-            return new AjaxResult(4);
-        }
-        if (!account.getLoginPasswd().equals(loginPasswd2)) {
-
-            return new AjaxResult(5);
-        }
-        if (!(account.getTelephone().matches("^(0[0-9]{2,3}/-)?([2-9][0-9]{6,7})+(/-[0-9]{1,4})?$") || account.getTelephone().matches("^((/(/d{3}/))|(/d{3}/-))?13[0-9]/d{8}|15[89]/d{8}"))) {
-
-            return new AjaxResult(6);
-        }
-        if (new IDCard().Verify(recommenderIdcardNo)) {
-            return new AjaxResult(7);
-        }
-        if (account.getEmail().matches("^([a-z0-9A-Z]+[-|_|\\.]?)+[a-z0-9A-Z]@([a-z0-9A-Z]+(-[a-z0-9A-Z]+)?\\.)+[a-zA-Z]{2,}$")) {
-            return new AjaxResult(8);
-        }
-        if (account.getMailaddress().matches("^(?=.*?[\\u4E00-\\u9FA5])[\\d\\u4E00-\\u9FA5]+")) {
-            return new AjaxResult(9);
-        }
-        if (account.getZipcode().matches("[1-9]\\d{5}(?!\\d)")) {
-            return new AjaxResult(10);
-        }
-        if (account.getQq().matches("[1-9][0-9]{4,14}")) {
-            return new AjaxResult(11);
-        }
+    public AjaxResult addAccount1(Account account, @RequestParam("recommenderIdcardNo") String recommenderIdcardNo) {
+//
+//        if (!new IDCard().Verify(account.getIdcardNo())) {
+//            return new AjaxResult(1);
+//        }
+//        if (!account.getLoginName().matches("^(?![0-9]+$)(?![a-z]+$)(?![A-Z]+$)(?![0-9a-z]+$)(?![0-9A-Z]+$)(?![a-zA-Z]+$)" + "[0-9A-Za-z]{0,30}$")) {
+//            return new AjaxResult(3);
+//        }
+//        if (!account.getLoginPasswd().matches("^(?![0-9]+$)(?![a-z]+$)(?![A-Z]+$)(?![0-9a-z]+$)(?![0-9A-Z]+$)(?![a-zA-Z]+$)" + "[0-9A-Za-z]{6,10}$")) {
+//            return new AjaxResult(4);
+//        }
+//
+//        if (!(account.getTelephone().matches("^(0[0-9]{2,3}/-)?([2-9][0-9]{6,7})+(/-[0-9]{1,4})?$") || account.getTelephone().matches("^((/(/d{3}/))|(/d{3}/-))?13[0-9]/d{8}|15[89]/d{8}"))) {
+//
+//            return new AjaxResult(6);
+//        }
+//        if (new IDCard().Verify(recommenderIdcardNo)) {
+//            return new AjaxResult(7);
+//        }
+//        if (account.getEmail().matches("^([a-z0-9A-Z]+[-|_|\\.]?)+[a-z0-9A-Z]@([a-z0-9A-Z]+(-[a-z0-9A-Z]+)?\\.)+[a-zA-Z]{2,}$")) {
+//            return new AjaxResult(8);
+//        }
+//        if (account.getMailaddress().matches("^(?=.*?[\\u4E00-\\u9FA5])[\\d\\u4E00-\\u9FA5]+")) {
+//            return new AjaxResult(9);
+//        }
+//        if (account.getZipcode().matches("[1-9]\\d{5}(?!\\d)")) {
+//            return new AjaxResult(10);
+//        }
+//        if (account.getQq().matches("[1-9][0-9]{4,14}")) {
+//            return new AjaxResult(11);
+//        }
 
         account.setStatus("开通");
 

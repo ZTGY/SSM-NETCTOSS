@@ -26,9 +26,13 @@
         //用来显示当前用户姓名
         function getUsername() {
             $.ajax({
+
                 url: "/showName",
+
                 success: function (result) {
+
                     $("#username").html(result.data.name);
+
                 }
             })
         }
@@ -48,10 +52,10 @@
     <ul id="menu">
         <li><a href="../index.html" class="index_off"></a></li>
         <li><a href="/role_list" class="role_off"></a></li>
-        <li><a href="admin_list" class="admin_off"></a></li>
+        <li><a href="/admin_list" class="admin_off"></a></li>
         <li><a href="/fee_list" class="fee_off"></a></li>
         <li><a href="/account_list" class="account_off"></a></li>
-        <li><a href="/service_list" class="service_off"></a></li>
+        <li><a href="/service_list" class="service_on"></a></li>
         <li><a href="/bill_list" class="bill_off"></a></li>
         <li><a href="/report_list" class="report_off"></a></li>
         <li><a href="/user_info" class="information_off"></a></li>
@@ -146,7 +150,7 @@
 
                 $.each(result.data, function (index, domEle) {
 
-                    $("#costType").append("<option>" + domEle.name + "</option>").attr("num",domEle.costId);
+                    $("#costType").append("<option>" + domEle.name + "</option>").attr("num", domEle.costId);
                 });
             }
         })
@@ -155,6 +159,13 @@
     getAllCostTypes();
 
     $("#sub").click(function () {
+
+        if ($("#loginPasswd").val() != $("#loginPasswd2").val()) {
+
+            $("#div").html("两次密码必须相同");
+
+            return;
+        }
 
         $.ajax({
 
@@ -172,16 +183,12 @@
 
                 //保存结果的提示
 
-                if (result.data == 1) {
+                if (result) {
 
                     showResultDiv(true);
 
                     window.location.href = "/service_list";
-                }
-                if (result.data == 2) {
-                    $("#div").html("两次密码必须相同");
-                }
-                if (result.data == 3) {
+                } else {
 
                     window.setTimeout("showResultDiv(false);", 3000);
 

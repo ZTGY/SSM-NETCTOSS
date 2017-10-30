@@ -6,9 +6,9 @@ import java.util.List;
  * @author dllo
  */
 public class RoleInfo {
-    private Integer roleId;
+    private Integer roleId;//角色id
 
-    private String name;
+    private String name;//角色名称
 
     private List<ModuleInfo> moduleInfoList;
 

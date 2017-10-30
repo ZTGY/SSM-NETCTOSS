@@ -28,4 +28,6 @@ public interface CostMapper {
     List<Cost> findAllByTimeDesc();
 
     List<Cost> findAllCosts();
+
+    Cost selectByCostType(String costType);
 }
