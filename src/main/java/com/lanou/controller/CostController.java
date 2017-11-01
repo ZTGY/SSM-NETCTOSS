@@ -28,7 +28,6 @@ public class CostController {
     @Resource
     private CostService costService;
 
-
     //跳转到显示全部资费页面
     @RequestMapping(value = "/fee_list")
     public String findAllCosts() {
@@ -66,12 +65,21 @@ public class CostController {
 
 
     //修改一条数据
-    @RequestMapping(value = "/updateCost", method = RequestMethod.POST)
-    public String update(Cost cost) {
+    @ResponseBody
+    @RequestMapping(value = "/updateCost",method = RequestMethod.POST)
+    public AjaxResult update(Cost cost) {
 
-        costService.updateByPrimaryKeySelective(cost);
+        int i = costService.updateByPrimaryKeySelective(cost);
 
-        return "fee/fee_list";
+        if (i > 0) {
+
+            return new AjaxResult(true);
+
+        } else {
+
+            return new AjaxResult(false);
+        }
+
     }
 
     //开通此条资费服务

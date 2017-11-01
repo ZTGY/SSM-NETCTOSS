@@ -4,7 +4,6 @@ import com.github.pagehelper.PageInfo;
 import com.lanou.bean.Account;
 import com.lanou.service.AccountService;
 import com.lanou.utils.AjaxResult;
-import com.lanou.utils.IDCard;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -15,7 +14,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.regex.Pattern;
+
 
 /**
  * Created by dllo on 17/10/23.
@@ -60,36 +59,14 @@ public class AccountController {
     @ResponseBody
     @RequestMapping(value = "/account_add1")
     public AjaxResult addAccount1(Account account, @RequestParam("recommenderIdcardNo") String recommenderIdcardNo) {
-//
-//        if (!new IDCard().Verify(account.getIdcardNo())) {
-//            return new AjaxResult(1);
-//        }
-//        if (!account.getLoginName().matches("^(?![0-9]+$)(?![a-z]+$)(?![A-Z]+$)(?![0-9a-z]+$)(?![0-9A-Z]+$)(?![a-zA-Z]+$)" + "[0-9A-Za-z]{0,30}$")) {
-//            return new AjaxResult(3);
-//        }
-//        if (!account.getLoginPasswd().matches("^(?![0-9]+$)(?![a-z]+$)(?![A-Z]+$)(?![0-9a-z]+$)(?![0-9A-Z]+$)(?![a-zA-Z]+$)" + "[0-9A-Za-z]{6,10}$")) {
-//            return new AjaxResult(4);
-//        }
-//
-//        if (!(account.getTelephone().matches("^(0[0-9]{2,3}/-)?([2-9][0-9]{6,7})+(/-[0-9]{1,4})?$") || account.getTelephone().matches("^((/(/d{3}/))|(/d{3}/-))?13[0-9]/d{8}|15[89]/d{8}"))) {
-//
-//            return new AjaxResult(6);
-//        }
-//        if (new IDCard().Verify(recommenderIdcardNo)) {
-//            return new AjaxResult(7);
-//        }
-//        if (account.getEmail().matches("^([a-z0-9A-Z]+[-|_|\\.]?)+[a-z0-9A-Z]@([a-z0-9A-Z]+(-[a-z0-9A-Z]+)?\\.)+[a-zA-Z]{2,}$")) {
-//            return new AjaxResult(8);
-//        }
-//        if (account.getMailaddress().matches("^(?=.*?[\\u4E00-\\u9FA5])[\\d\\u4E00-\\u9FA5]+")) {
-//            return new AjaxResult(9);
-//        }
-//        if (account.getZipcode().matches("[1-9]\\d{5}(?!\\d)")) {
-//            return new AjaxResult(10);
-//        }
-//        if (account.getQq().matches("[1-9][0-9]{4,14}")) {
-//            return new AjaxResult(11);
-//        }
+
+
+        if (recommenderIdcardNo != null) {
+
+            Account account1 = accountService.selectByIdcardNo(recommenderIdcardNo);
+
+            account.setRecommenderId(account1.getAccountId());
+        }
 
         account.setStatus("开通");
 
@@ -183,16 +160,41 @@ public class AccountController {
 
         Account account = (Account) request.getSession().getAttribute("account");
 
-        return new AjaxResult(account);
+        Account account1 = accountService.selectByPrimaryKey(account.getRecommenderId());
+
+        if (account1 != null) {
+
+            return new AjaxResult(account1.getIdcardNo(), 0, account);
+
+        } else {
+
+            return new AjaxResult("",0,account);
+
+        }
     }
 
     //修改一条账户账号
+    @ResponseBody
     @RequestMapping(value = "/updateAccount", method = RequestMethod.POST)
-    public String updateAccount(Account account) {
+    public AjaxResult updateAccount(Account account,@RequestParam("recommenderIdcardNo") String recommenderIdcardNo) {
 
-        accountService.updateByPrimaryKeySelective(account);
+        if (recommenderIdcardNo != null) {
 
-        return "account/account_list";
+            Account account1 = accountService.selectByIdcardNo(recommenderIdcardNo);
+
+            account.setRecommenderId(account1.getAccountId());
+        }
+
+        int i = accountService.updateByPrimaryKeySelective(account);
+
+        if (i > 0) {
+
+            return new AjaxResult(true);
+
+        } else {
+
+            return new AjaxResult(false);
+        }
     }
 
     //查找当前所选的账户对象
@@ -222,15 +224,32 @@ public class AccountController {
 
         Account account = (Account) request.getSession().getAttribute("account");
 
-        return new AjaxResult(account);
+        Account account1 = accountService.selectByPrimaryKey(account.getRecommenderId());
+
+        if (account1 != null) {
+
+            return new AjaxResult(account1.getIdcardNo(), 0, account);
+
+        } else {
+
+            return new AjaxResult("",0,account);
+
+        }
     }
+
     //通过身份账号查询账务账号
     @ResponseBody
     @RequestMapping(value = "/searchAccountId")
-    public AjaxResult searchAccountId(@RequestParam("idcardNo")String idcardNo) {
+    public AjaxResult searchAccountId(@RequestParam("idcardNo") String idcardNo) {
 
         Account account = accountService.selectByIdcardNo(idcardNo);
 
+        if (account == null) {
+            return new AjaxResult(0);
+        }
+        if (account.getLoginName() == null) {
+            return new AjaxResult(1);
+        }
         return new AjaxResult(account);
     }
 }

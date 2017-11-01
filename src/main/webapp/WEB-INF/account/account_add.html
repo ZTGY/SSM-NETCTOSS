@@ -89,42 +89,36 @@
     <div class="input_info">
         <input type="text" id="realName"/>
         <span class="required">*</span>
-        <div class="validate_msg_long">20长度以内的汉字</div>
-        <div class="validate_msg_long" id="div1"></div>
+        <div class="validate_msg_long" id="div1">20长度以内的汉字</div>
     </div>
     <div class="text_info clearfix"><span>身份证：</span></div>
     <div class="input_info">
         <input type="text" id="idcardNo" onchange="birth()"/>
         <span class="required">*</span>
-        <div class="validate_msg_long">正确的身份证号码格式</div>
         <div class="validate_msg_long" id="div2"></div>
     </div>
     <div class="text_info clearfix"><span>登录账号：</span></div>
     <div class="input_info">
         <input type="text" id="loginName"/>
         <span class="required">*</span>
-        <div class="validate_msg_long">30长度以内的字母、数字和下划线的组合</div>
-        <div class="validate_msg_long" id="div3"></div>
+        <div class="validate_msg_long" id="div3">30长度以内的字母、数字和下划线的组合</div>
     </div>
     <div class="text_info clearfix"><span>密码：</span></div>
     <div class="input_info">
         <input type="password" id="loginPasswd"/>
         <span class="required">*</span>
-        <div class="validate_msg_long">30长度以内的字母、数字和下划线的组合</div>
-        <div class="validate_msg_long" id="div4"></div>
+        <div class="validate_msg_long" id="div4">30长度以内的字母、数字和下划线的组合</div>
     </div>
     <div class="text_info clearfix"><span>重复密码：</span></div>
     <div class="input_info">
         <input type="password" id="loginPasswd2"/>
         <span class="required">*</span>
-        <div class="validate_msg_long">两次密码必须相同</div>
         <div class="validate_msg_long" id="div5"></div>
     </div>
-    <div class="text_info clearfix"><span>电话：</span></div>
+    <div class="text_info clearfix"><span>移动电话：</span></div>
     <div class="input_info">
         <input type="text" class="width200" id="telephone"/>
         <span class="required">*</span>
-        <div class="validate_msg_medium">正确的电话号码格式：手机或固话</div>
         <div class="validate_msg_medium" id="div6"></div>
     </div>
     <!--可选项-->
@@ -136,7 +130,7 @@
         <div class="text_info clearfix"><span>推荐人身份证号码：</span></div>
         <div class="input_info">
             <input type="text" id="recommenderIdcardNo"/>
-            <div class="validate_msg_long">正确的身份证号码格式</div>
+            <div class="validate_msg_long" id="div7"></div>
         </div>
         <div class="text_info clearfix"><span>生日：</span></div>
         <div class="input_info">
@@ -145,7 +139,7 @@
         <div class="text_info clearfix"><span>Email：</span></div>
         <div class="input_info">
             <input type="text" class="width350" id="email"/>
-            <div class="validate_msg_tiny">50长度以内，合法的 Email 格式</div>
+            <div class="validate_msg_tiny" id="div8"></div>
         </div>
         <div class="text_info clearfix"><span>职业：</span></div>
         <div class="input_info">
@@ -167,18 +161,17 @@
         <div class="input_info">
             <input type="text" class="width350" id="mailaddress"/>
 
-            <div class="validate_msg_tiny">50长度以内</div>
-
+            <div class="validate_msg_tiny" id="div9">50长度以内的数字字母汉字的组合</div>
         </div>
         <div class="text_info clearfix"><span>邮编：</span></div>
         <div class="input_info">
             <input type="text" id="zipcode"/>
-            <div class="validate_msg_long">6位数字</div>
+            <div class="validate_msg_long" id="div10">6位数字</div>
         </div>
         <div class="text_info clearfix"><span>QQ：</span></div>
         <div class="input_info">
             <input type="text" id="qq"/>
-            <div class="validate_msg_long">5到13位数字</div>
+            <div class="validate_msg_long" id="div11">5到13位数字</div>
         </div>
     </div>
     <!--操作按钮-->
@@ -196,45 +189,126 @@
 </body>
 <script type="text/javascript">
     $("#sub").click(function () {
-        if ($("#realName").val() == null) {
-            $("#div1").html("输入的姓名不能为空");
-            return;
-        }
-        if ($("#realName").val().matches("^[\\u4e00-\\u9fa5]{0,20}$")) {
-            $("#div1").html("输入的姓名格式不正确");
-            return;
-        }
-        if ($("#idcardNo").val() == null) {
-            $("#div2").html("输入的身份证号不能为空");
+
+        var obj = $("#realName").val();
+
+        if (obj == "" || !new RegExp("^[\u4e00-\u9fa5]{0,20}$").test(obj)) {
+
+            $("#div1").attr("class", "validate_msg_long error_msg");
+
             return;
         }
 
-        if ($("#loginName").val() == null) {
-            $("#div2").html("输入的身份证号格式不正确");
+        var obj1 = $("#idcardNo").val();
+
+        if (obj1 == "" || !new RegExp("((11|12|13|14|15|21|22|23|31|32|33|34|35|36|37|41|42|43|44|45|46|50|51|52|53|54|61|62|63|64|65)[0-9]{4})" +
+                        "(([1|2][0-9]{3}[0|1][0-9][0-3][0-9][0-9]{3}" +
+                        "[Xx0-9])|([0-9]{2}[0|1][0-9][0-3][0-9][0-9]{3}))").test(obj1)) {
+            $("#div2").attr("class", "validate_msg_long error_msg").html("身份证号码格式不正确");
+
             return;
         }
-        if ($("#loginPasswd").val() == null) {
-            $("#div3").html("输入的密码不能为空");
+
+        var obj2 = $("#loginName").val();
+
+        if (obj2 == "" || !new RegExp("^(?!_)(?!.*?_$)[a-zA-Z0-9_\u4e00-\u9fa5]{0,30}$").test(obj2)) {
+
+            $("#div3").attr("class", "validate_msg_long error_msg");
+
             return;
         }
-        if ($("#loginPasswd2").val() == null) {
-            $("#div4").html("再次输入的密码不能为空");
+        var obj3 = $("#loginPasswd").val();
+
+        if (obj3 == "" || !new RegExp("^(?!_)(?!.*?_$)[a-zA-Z0-9_\u4e00-\u9fa5]{0,30}$").test(obj3)) {
+
+            $("#div4").attr("class", "validate_msg_long error_msg");
+
             return;
         }
-        if ($("#telephone").val() == null) {
-            $("#div6").html("再次输入的密码不能为空");
+        if ($("#loginPasswd").val() != $("#loginPasswd2").val()) {
+
+            $("#div5").attr("class", "validate_msg_long error_msg").html("两次密码必须相同");
+
             return;
         }
+        var obj4 = $("#telephone").val();
+
+        if (obj4 == "" || !new RegExp("^(13[0-9]|15[0|3|6|7|8|9]|18[8|9])\\d{8}$").test(obj4)) {
+
+            $("#div6").attr("class", "validate_msg_medium error_msg").html("手机号码格式不正确");
+
+            return;
+        }
+        if ($("#recommenderIdcardNo").val() != "") {
+
+            var obj5 = $("#recommenderIdcardNo").val();
+
+            if (!new RegExp("((11|12|13|14|15|21|22|23|31|32|33|34|35|36|37|41|42|43|44|45|46|50|51|52|53|54|61|62|63|64|65)[0-9]{4})" +
+                            "(([1|2][0-9]{3}[0|1][0-9][0-3][0-9][0-9]{3}" +
+                            "[Xx0-9])|([0-9]{2}[0|1][0-9][0-3][0-9][0-9]{3}))").test(obj5)) {
+                $("#div7").attr("class", "validate_msg_long error_msg").html("身份证号码不正确");
+
+                return;
+            }
+        }
+        if ($("#email").val() != "") {
+
+            var obj6 = $("#email").val();
+
+            if (!new RegExp("^\\w+([-+.]\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*$").test(obj6)) {
+
+                $("#div8").attr("class", "validate_msg_tiny error_msg").html("邮箱格式不正确");
+
+                return;
+            }
+        }
+        if ($("#mailaddress").val() != "") {
+
+            var obj7 = $("#mailaddress").val();
+
+            if (!new RegExp("^(?=.*?[\u4E00-\u9FA5])[\d\u4E00-\u9FA5]+").test(obj7)) {
+
+                $("#div9").attr("class", "validate_msg_tiny error_msg");
+
+                return;
+            }
+        }
+        if ($("#zipcode").val() != "") {
+
+            var obj8 = $("#zipcode").val();
+
+            if (!new RegExp("[1-9]\\d{5}(?!\\d)").test(obj8)) {
+
+                $("#div10").attr("class", "validate_msg_long error_msg");
+
+                return;
+            }
+        }
+        if ($("#qq").val() != "") {
+
+            var obj9 = $("#qq").val();
+
+            if (!new RegExp("[1-9][0-9]{4,14}").test(obj9)) {
+
+                $("#div11").attr("class", "validate_msg_long error_msg");
+
+                return;
+            }
+        }
+
         $.ajax({
+
             url: "/account_add1",
+
             data: {
+
                 realName: $("#realName").val(),
                 idcardNo: $("#idcardNo").val(),
                 loginName: $("#loginName").val(),
                 loginPasswd: $("#loginPasswd").val(),
-                loginPasswd2: $("#loginPasswd2").val(),
                 telephone: $("#telephone").val(),
                 recommenderIdcardNo: $("#recommenderIdcardNo").val(),
+                birthdate: $("#birthdate").val(),
                 email: $("#email").val(),
                 occupation: $("#occupation").val(),
                 gender: $("input[type='radio']:checked").val(),
@@ -259,6 +333,38 @@
             }
         });
     });
-
+    $("#realName").focus(function () {
+        $("#div1").attr("class", "validate_msg_long");
+    })
+    $("#idcardNo").focus(function () {
+        $("#div2").attr("class", "validate_msg_long").html(null);
+    })
+    $("#loginName").focus(function () {
+        $("#div3").attr("class", "validate_msg_long");
+    })
+    $("#loginPasswd").focus(function () {
+        $("#div4").attr("class", "validate_msg_long");
+    })
+    $("#loginPasswd2").focus(function () {
+        $("#div5").attr("class", "validate_msg_long").html(null);
+    })
+    $("#telephone").focus(function () {
+        $("#div6").attr("class", "validate_msg_medium").html(null);
+    })
+    $("#recommenderIdcardNo").focus(function () {
+        $("#div7").attr("class", "validate_msg_long").html(null);
+    })
+    $("#email").focus(function () {
+        $("#div8").attr("class", "validate_msg_tiny").html(null);
+    })
+    $("#mailaddress").focus(function () {
+        $("#div9").attr("class", "validate_msg_tiny");
+    })
+    $("#zipcode").focus(function () {
+        $("#div10").attr("class", "validate_msg_long");
+    })
+    $("#qq").focus(function () {
+        $("#div11").attr("class", "validate_msg_long");
+    })
 </script>
 </html>

@@ -26,15 +26,14 @@
                     },
                     success: function (result) {
 
-                        alert(result.data);
-
                         var roleId = result.data;
 
                         $("#trname" + roleId).remove();
 
                     }
                 });
-                document.getElementById("operate_result_info").style.display = "block";
+
+                alert("删除成功");
             }
 
         }

@@ -73,13 +73,13 @@
         <input type="text" id="idcardNo" class="width180"/>
         <input type="button" value="查询账务账号" class="btn_search_large" id="search"/>
         <span class="required">*</span>
-        <div class="validate_msg_short">没有此身份证号，请重新录入。</div>
+        <div class="validate_msg_short" id="div"></div>
     </div>
     <div class="text_info clearfix"><span>账务账号：</span></div>
     <div class="input_info">
-        <input type="text" id="accountId" onkeyup="searchAccounts(this);"/>
+        <input type="text" id="accountId" class="readonly" readonly onkeyup="searchAccounts(this);"/>
         <span class="required">*</span>
-        <div class="validate_msg_long">没有此账务账号，请重新录入。</div>
+        <div class="validate_msg_long" id="div1"></div>
     </div>
     <div class="text_info clearfix"><span>资费类型：</span></div>
     <div class="input_info">
@@ -93,25 +93,25 @@
     <div class="input_info">
         <input type="text" id="unixHost"/>
         <span class="required">*</span>
-        <div class="validate_msg_long">15 长度，符合IP的地址规范</div>
+        <div class="validate_msg_long" id="div2">15 长度，符合IP的地址规范</div>
     </div>
     <div class="text_info clearfix"><span>登录 OS 账号：</span></div>
     <div class="input_info">
         <input type="text" id="osUsername"/>
         <span class="required">*</span>
-        <div class="validate_msg_long">8长度以内的字母、数字和下划线的组合</div>
+        <div class="validate_msg_long" id="div3">8长度以内的字母、数字和下划线的组合</div>
     </div>
     <div class="text_info clearfix"><span>密码：</span></div>
     <div class="input_info">
         <input type="password" id="loginPasswd"/>
         <span class="required">*</span>
-        <div class="validate_msg_long">30长度以内的字母、数字和下划线的组合</div>
+        <div class="validate_msg_long" id="div4">30长度以内的字母、数字和下划线的组合</div>
     </div>
     <div class="text_info clearfix"><span>重复密码：</span></div>
     <div class="input_info">
         <input type="password" id="loginPasswd2"/>
         <span class="required">*</span>
-        <div class="validate_msg_long" id="div" style="color: red"></div>
+        <div class="validate_msg_long" id="div5"></div>
     </div>
     <!--操作按钮-->
     <div class="button_info clearfix">
@@ -128,25 +128,52 @@
 </body>
 <script type="text/javascript">
     $("#search").click(function () {
+
+        var obj = $("#idcardNo").val();
+
+        if (obj == "" || !new RegExp("((11|12|13|14|15|21|22|23|31|32|33|34|35|36|37|41|42|43|44|45|46|50|51|52|53|54|61|62|63|64|65)[0-9]{4})" +
+                        "(([1|2][0-9]{3}[0|1][0-9][0-3][0-9][0-9]{3}" +
+                        "[Xx0-9])|([0-9]{2}[0|1][0-9][0-3][0-9][0-9]{3}))").test(obj)) {
+
+            $("#div").attr("class", "validate_msg_short error_msg").html("身份证号码格式不正确");
+
+            return;
+        }
+
         $.ajax({
+
             url: "/searchAccountId",
+
             data: {
                 idcardNo: $("#idcardNo").val()
             },
             success: function (result) {
+
+                if (result.data == 0) {
+
+                    $("#div").attr("class", "validate_msg_short error_msg").html("没有此身份证号，请重新录入。");
+
+                    return;
+                }
+
+                if (result.data == 1) {
+
+                    $("#div1").attr("class", "validate_msg_long error_msg").html("没有此账务账号，请重新录入。");
+
+                    return;
+                }
+
                 $("#accountId").val(result.data.loginName).attr("num", result.data.accountId);
             }
         })
-
     });
     function getAllCostTypes() {
+
         $.ajax({
 
             url: "/findAllCosts",
 
             success: function (result) {
-
-                console.log(result.data);
 
                 $.each(result.data, function (index, domEle) {
 
@@ -160,9 +187,45 @@
 
     $("#sub").click(function () {
 
+        var obj1 = $("#accountId").val();
+
+        if (obj1 == "") {
+
+            $("#div1").attr("class", "validate_msg_long error_msg").html("账务账号为空,请重新录入.");
+
+            return;
+        }
+
+        var obj2 = $("#unixHost").val();
+
+        if (obj2 == "" || !new RegExp("((?:(?:25[0-5]|2[0-4]\\d|[01]?\\d?\\d)\\.){3}(?:25[0-5]|2[0-4]\\d|[01]?\\d?\\d))").test(obj2)) {
+
+            $("#div2").attr("class", "validate_msg_long error_msg");
+
+            return;
+        }
+
+        var obj3 = $("#osUsername").val();
+
+        if (obj3 == "" || !new RegExp("^(?!_)(?!.*?_$)[a-zA-Z0-9_\u4e00-\u9fa5]{0,8}$").test(obj3)) {
+
+            $("#div3").attr("class", "validate_msg_long error_msg");
+
+            return;
+        }
+
+        var obj4 = $("#loginPasswd").val();
+
+        if (obj4 == "" || !new RegExp("^(?!_)(?!.*?_$)[a-zA-Z0-9_\u4e00-\u9fa5]{0,30}$").test(obj4)) {
+
+            $("#div4").attr("class", "validate_msg_long error_msg");
+
+            return;
+        }
+
         if ($("#loginPasswd").val() != $("#loginPasswd2").val()) {
 
-            $("#div").html("两次密码必须相同");
+            $("#div5").attr("class", "validate_msg_long error_msg").html("两次密码必须相同");
 
             return;
         }
@@ -176,8 +239,7 @@
                 costId: $("#costType").attr("num"),
                 unixHost: $("#unixHost").val(),
                 osUsername: $("#osUsername").val(),
-                loginPasswd: $("#loginPasswd").val(),
-                loginPasswd2: $("#loginPasswd2").val()
+                loginPasswd: $("#loginPasswd").val()
             },
             success: function (result) {
 
@@ -197,5 +259,25 @@
         });
     });
 
+    $("#idcardNo").focus(function () {
+        $("#div").attr("class", "validate_msg_short").html(null);
+        $("#div1").attr("class", "validate_msg_long").html(null);
+        $("#accountId").val(null);
+    })
+    $("#accountId").blur(function () {
+        $("#div1").attr("class", "validate_msg_long").html(null)
+    })
+    $("#unixHost").focus(function () {
+        $("#div2").attr("class", "validate_msg_long");
+    })
+    $("#osUsername").focus(function () {
+        $("#div3").attr("class", "validate_msg_long");
+    })
+    $("#loginPasswd").focus(function () {
+        $("#div4").attr("class", "validate_msg_long");
+    })
+    $("#loginPasswd2").focus(function () {
+        $("#div5").attr("class", "validate_msg_long").html(null);
+    })
 </script>
 </html>

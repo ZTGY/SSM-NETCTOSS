@@ -94,7 +94,7 @@
     <div class="input_info">
         <input type="text" class="width300" id="name"/>
         <span class="required">*</span>
-        <div class="validate_msg_short" id="div4">50长度的字母、数字、汉字和下划线的组合</div>
+        <div class="validate_msg_short" id="div4">50长度以内的字母、数字、汉字的组合</div>
     </div>
     <div class="text_info clearfix"><span>资费类型：</span></div>
     <div class="input_info fee_type">
@@ -148,45 +148,73 @@
 
         var obj = $("#name").val();
 
-        if(obj == ""|| ! new RegExp("^(?![0-9]+$)(?![a-z]+$)(?![A-Z]+$)(?![0-9a-z]+$)(?![0-9A-Z]+$)(?![a-zA-Z]+$)" + "[0-9A-Za-z]{0,50}$").test(obj)){
+        if (obj == "" || !new RegExp("^(?!_)(?!.*?_$)[a-zA-Z0-9_\u4e00-\u9fa5]{0,50}$").test(obj)) {
 
             $("#div4").attr("class", "validate_msg_short error_msg");
 
             return;
         }
 
-        var obj0 = $("#baseDuration").val();
+        if ($("input[type='radio']:checked").val() == "包月") {
+            var obj1 = $("#baseCost").val();
 
-        if (!Math.floor(obj0) === obj0 || obj0 < 1 || obj0 > 600 || obj0 == "") {
+            if (!(Math.abs(obj1) == obj1) || obj1 < 0 || obj1 > 99999.99 || obj1 == "") {
 
-            $("#div0").attr("class", "validate_msg_long error_msg");
+                $("#div1").attr("class", "validate_msg_long error_msg");
 
-            return;
+                return;
+            }
         }
-        var obj1 = $("#baseCost").val();
+        if ($("input[type='radio']:checked").val() == "套餐") {
 
-        if (!Math.floor(obj1) === obj1 || obj1 < 0 || obj1 > 99999.99 || obj1 == "") {
+            var obj0 = $("#baseDuration").val();
 
-            $("#div1").attr("class", "validate_msg_long error_msg");
+            if (!(Math.floor(obj0) == obj0) || obj0 < 1 || obj0 > 600 || obj0 == "") {
 
-            return;
+                $("#div0").attr("class", "validate_msg_long error_msg");
+
+                return;
+            }
+            var obj1 = $("#baseCost").val();
+
+            console.log(Math.abs(obj1) == obj1)
+
+            if (!(Math.abs(obj1) == obj1) || obj1 < 0 || obj1 > 99999.99 || obj1 == "") {
+
+                $("#div1").attr("class", "validate_msg_long error_msg");
+
+                return;
+            }
+            var obj2 = $("#unitCost").val();
+
+            if (!(Math.abs(obj2) == obj2) || obj2 < 0 || obj2 > 99999.99 || obj2 == "") {
+
+                $("#div2").attr("class", "validate_msg_long error_msg");
+
+                return;
+            }
         }
-        var obj2 = $("#unitCost").val();
+        if ($("input[type='radio']:checked").val() == "计时") {
+            var obj2 = $("#unitCost").val();
 
-        if (!Math.floor(obj2) === obj2 || obj2 < 0 || obj2 > 99999.99 || obj2 == "") {
+            if (!(Math.abs(obj2) == obj2) || obj2 < 0 || obj2 > 99999.99 || obj2 == "") {
 
-            $("#div2").attr("class", "validate_msg_long error_msg");
+                $("#div2").attr("class", "validate_msg_long error_msg");
 
-            return;
+                return;
+            }
         }
 
-        var obj3 = $("#descr").val();
+        if (obj3 = $("#descr").val() != "") {
 
-        if(obj3 == ""||! new RegExp("^(?![0-9]+$)(?![a-z]+$)(?![A-Z]+$)(?![0-9a-z]+$)(?![0-9A-Z]+$)(?![a-zA-Z]+$)" + "[0-9A-Za-z]{0,50}$").test(obj3)){
+            var obj3 = $("#descr").val();
 
-            $("#div3").attr("class", "validate_msg_short error_msg");
+            if (!new RegExp("^(?!_)(?!.*?_$)[a-zA-Z0-9_\u4e00-\u9fa5]{0,100}$").test(obj3)) {
 
-            return;
+                $("#div3").attr("class", "validate_msg_short error_msg");
+
+                return;
+            }
         }
 
         $.ajax({

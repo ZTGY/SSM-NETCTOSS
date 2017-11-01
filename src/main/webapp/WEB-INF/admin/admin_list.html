@@ -51,15 +51,15 @@
                     },
                     success: function (result) {
 
-                        alert(result.data);
-
                         var adminId = result.data;
 
                         $("#trname" + adminId).remove();
 
                     }
                 });
-                document.getElementById("operate_result_info").style.display = "block";
+
+                alert("删除成功");
+
             }
 
         }
@@ -139,10 +139,10 @@
 
             var tddelete = $("<input type='button' value='删除' class='btn_delete'/>").click(deleteAdmin).attr("num", msg.adminId).attr("id", "delete" + msg.adminId);
 
-            var tdright = $("<td></td>").append(tdmodify).append(tddelete).attr("id", "trname" + msg.adminId);
+            var tdright = $("<td></td>").append(tdmodify).append(tddelete);
 
             var trob = $("<tr class='trob'></tr>").append(tdleft).append(tdleft1).append(tdleft2).append(tdleft3).append(tdleft4)
-                    .append(tdleft5).append(tdleft6).append(tdleft7).append(tdright);
+                    .append(tdleft5).append(tdleft6).append(tdleft7).append(tdright).attr("id", "trname" + msg.adminId);
 
             $("#datalist").append(trob);
 
@@ -208,7 +208,7 @@
             $("#pages").append(prePage);
 
             //添加页数
-            for (var i = 0; i < result.pages; i++) {
+            for (var i = 0; i < result.navigatepageNums.length; i++) {
 
                 var pageNumber = $("<a href='###'></a>").click(currentPage).attr("flag", flag).attr("num", i + 1).html(i + 1);
 
@@ -221,6 +221,7 @@
                 $("#pages").append(pageNumber);
 
             }
+
 
             //添加下一页
 
@@ -373,40 +374,23 @@
     <!--数据区域：用表格展示数据-->
     <div id="data">
         <table id="datalist">
-            <tr>
-                <th class="th_select_all">
-                    <input type="checkbox" onclick="selectAdmins(this);"/>
-                    <span>全选</span>
-                </th>
-                <th>管理员ID</th>
-                <th>姓名</th>
-                <th>登录名</th>
-                <th>电话</th>
-                <th>电子邮件</th>
-                <th>授权日期</th>
-                <th class="width100">拥有角色</th>
-                <th></th>
-            </tr>
-            <tr>
-                <td><input type="checkbox"/></td>
-                <td>1</td>
-                <td>贾强</td>
-                <td>admin</td>
-                <td>13077332357</td>
-                <td>jiaqiang123@qq.com.cn</td>
-                <td>2011-31-12</td>
-                <td>
-                    <a class="summary" onmouseover="showDetail(true,this);" onmouseout="showDetail(false,this);">超级管理员...</a>
-                    <!--浮动的详细信息-->
-                    <div class="detail_info">
-                        超级管理员，角色管理员，账单管理员，报表管理员，业务账号管理员，账务账号管理员，aa，bb
-                    </div>
-                </td>
-                <td class="td_modi">
-                    <input type="button" value="修改" class="btn_modify" onclick="location.href='/admin_modify';"/>
-                    <input type="button" value="删除" class="btn_delete" onclick="deleteAdmin();"/>
-                </td>
-            </tr>
+            <thead>
+            <th class="th_select_all">
+                <input type="checkbox" onclick="selectAdmins(this);"/>
+                <span>全选</span>
+            </th>
+            <th>管理员ID</th>
+            <th>姓名</th>
+            <th>登录名</th>
+            <th>电话</th>
+            <th>电子邮件</th>
+            <th>授权日期</th>
+            <th class="width100">拥有角色</th>
+            <th></th>
+            </thead>
+            <tbody>
+
+            </tbody>
 
         </table>
     </div>

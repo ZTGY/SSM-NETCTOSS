@@ -149,8 +149,11 @@ public class AdminInfoController {
         }
 
         if (i > 0) {
+
             return new AjaxResult(true);
+
         } else {
+
             return new AjaxResult(false);
         }
 
@@ -211,6 +214,10 @@ public class AdminInfoController {
     @ResponseBody
     @RequestMapping(value = "/delAdmin")
     public AjaxResult deleteCost(@RequestParam("adminId") Integer adminId) {
+
+        adminInfoService.deleteByPrimaryKey(adminId);
+
+        adminInfoService.deleteAdminAndRoleByAdminId(adminId);
 
         return new AjaxResult(adminId);
     }

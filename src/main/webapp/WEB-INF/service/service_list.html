@@ -183,7 +183,7 @@
 
             var tdleft6 = $("<td></td>").html(msg.unixHost).attr("id", "unixHost" + msg.serviceId);
 
-            var tdleft7 = $("<td></td>").html(null).attr("id", "costType" + msg.serviceId);
+            var tdleft7 = $("<td></td>").html(msg.cost.costType).attr("id", "costType" + msg.serviceId);
 
             if (msg.status == "暂停") {
 

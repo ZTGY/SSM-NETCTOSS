@@ -71,57 +71,55 @@
 <!--导航区域结束-->
 <!--主要区域开始-->
 <div id="main">
-    <form action="/updateCost" method="post" class="main_form">
-        <div id="save_result_info" class="save_success">保存成功！</div>
-        <div class="text_info clearfix"><span>资费ID：</span></div>
-        <div class="input_info"><input type="text" class="readonly" readonly id="costId" name="costId"/></div>
-        <div class="text_info clearfix"><span>资费名称：</span></div>
-        <div class="input_info">
-            <input type="text" class="width300" id="name" name="name"/>
-            <span class="required">*</span>
-            <div class="validate_msg_short">50长度的字母、数字、汉字和下划线的组合</div>
-        </div>
-        <div class="text_info clearfix"><span>资费类型：</span></div>
+    <div id="save_result_info" class="save_success">保存成功！</div>
+    <div class="text_info clearfix"><span>资费ID：</span></div>
+    <div class="input_info"><input type="text" class="readonly" readonly id="costId" name="costId"/></div>
+    <div class="text_info clearfix"><span>资费名称：</span></div>
+    <div class="input_info">
+        <input type="text" class="width300" id="name" name="name"/>
+        <span class="required">*</span>
+        <div class="validate_msg_short" id="div4">50长度的字母、数字、汉字和下划线的组合</div>
+    </div>
+    <div class="text_info clearfix"><span>资费类型：</span></div>
 
-        <div class="input_info fee_type">
-            <input type="radio" name="costType" id="monthly" value="包月" onclick="feeTypeChange(1);"/>
-            <label for="monthly">包月</label>
-            <input type="radio" name="costType" value="套餐" id="package" onclick="feeTypeChange(2);"/>
-            <label for="package">套餐</label>
-            <input type="radio" name="costType" id="timeBased" value="计时" onclick="feeTypeChange(3);"/>
-            <label for="timeBased">计时</label>
-        </div>
-        <div class="text_info clearfix"><span>基本时长：</span></div>
-        <div class="input_info">
-            <input type="text" class="width100" id="baseDuration" name="baseDuration"/>
-            <span class="info">小时</span>
-            <span class="required">*</span>
-            <div class="validate_msg_long">1-600之间的整数</div>
-        </div>
-        <div class="text_info clearfix"><span>基本费用：</span></div>
-        <div class="input_info">
-            <input type="text" id="baseCost" class="width100" name="baseCost"/>
-            <span class="info">元</span>
-            <span class="required">*</span>
-            <div class="validate_msg_long">0-99999.99之间的数值</div>
-        </div>
-        <div class="text_info clearfix"><span>单位费用：</span></div>
-        <div class="input_info">
-            <input type="text" id="unitCost" class="width100" name="unitCost"/>
-            <span class="info">元/小时</span>
-            <span class="required">*</span>
-            <div class="validate_msg_long">0-99999.99之间的数值</div>
-        </div>
-        <div class="text_info clearfix"><span>资费说明：</span></div>
-        <div class="input_info_high">
-            <textarea class="width300 height70" id="descr" name="descr"></textarea>
-            <div class="validate_msg_short">100长度的字母、数字、汉字和下划线的组合</div>
-        </div>
-        <div class="button_info clearfix">
-            <input type="submit" value="保存" class="btn_save"/>
-            <input type="button" value="取消" class="btn_save" onclick="location.href='/fee_list';"/>
-        </div>
-    </form>
+    <div class="input_info fee_type">
+        <input type="radio" name="costType" id="monthly" value="包月" onclick="feeTypeChange(1);"/>
+        <label for="monthly">包月</label>
+        <input type="radio" name="costType" value="套餐" id="package" onclick="feeTypeChange(2);"/>
+        <label for="package">套餐</label>
+        <input type="radio" name="costType" id="timeBased" value="计时" onclick="feeTypeChange(3);"/>
+        <label for="timeBased">计时</label>
+    </div>
+    <div class="text_info clearfix"><span>基本时长：</span></div>
+    <div class="input_info">
+        <input type="text" class="width100" id="baseDuration" name="baseDuration"/>
+        <span class="info">小时</span>
+        <span class="required">*</span>
+        <div class="validate_msg_long" id="div0">1-600之间的整数</div>
+    </div>
+    <div class="text_info clearfix"><span>基本费用：</span></div>
+    <div class="input_info">
+        <input type="text" id="baseCost" class="width100" name="baseCost"/>
+        <span class="info">元</span>
+        <span class="required">*</span>
+        <div class="validate_msg_long" id="div1">0-99999.99之间的数值</div>
+    </div>
+    <div class="text_info clearfix"><span>单位费用：</span></div>
+    <div class="input_info">
+        <input type="text" id="unitCost" class="width100" name="unitCost"/>
+        <span class="info">元/小时</span>
+        <span class="required">*</span>
+        <div class="validate_msg_long" id="div2">0-99999.99之间的数值</div>
+    </div>
+    <div class="text_info clearfix"><span>资费说明：</span></div>
+    <div class="input_info_high">
+        <textarea class="width300 height70" id="descr" name="descr"></textarea>
+        <div class="validate_msg_short" id="div3">100长度的字母、数字、汉字和下划线的组合</div>
+    </div>
+    <div class="button_info clearfix">
+        <input type="submit" value="保存" class="btn_save" id="sub"/>
+        <input type="button" value="取消" class="btn_save" onclick="location.href='/fee_list';"/>
+    </div>
 </div>
 <!--主要区域结束-->
 <div id="footer">
@@ -173,5 +171,122 @@
     }
     getUsername();
 
+    $("#sub").click(function () {
+
+        var obj = $("#name").val();
+
+        if (obj == "" || !new RegExp("^(?!_)(?!.*?_$)[a-zA-Z0-9_\u4e00-\u9fa5]{0,50}$").test(obj)) {
+
+            $("#div4").attr("class", "validate_msg_short error_msg");
+
+            return;
+        }
+
+        if ($("input[type='radio']:checked").val() == "包月") {
+            var obj1 = $("#baseCost").val();
+
+            if (!(Math.abs(obj1) == obj1) || obj1 < 0 || obj1 > 99999.99 || obj1 == "") {
+
+                $("#div1").attr("class", "validate_msg_long error_msg");
+
+                return;
+            }
+        }
+        if ($("input[type='radio']:checked").val() == "套餐") {
+
+            var obj0 = $("#baseDuration").val();
+
+            if (!(Math.floor(obj0) == obj0) || obj0 < 1 || obj0 > 600 || obj0 == "") {
+
+                $("#div0").attr("class", "validate_msg_long error_msg");
+
+                return;
+            }
+            var obj1 = $("#baseCost").val();
+
+            if (!(Math.abs(obj1) == obj1) || obj1 < 0 || obj1 > 99999.99 || obj1 == "") {
+
+                $("#div1").attr("class", "validate_msg_long error_msg");
+
+                return;
+            }
+            var obj2 = $("#unitCost").val();
+
+            if (!(Math.abs(obj2) == obj2) || obj2 < 0 || obj2 > 99999.99 || obj2 == "") {
+
+                $("#div2").attr("class", "validate_msg_long error_msg");
+
+                return;
+            }
+        }
+        if ($("input[type='radio']:checked").val() == "计时") {
+            var obj2 = $("#unitCost").val();
+
+            if (!(Math.abs(obj2) == obj2) || obj2 < 0 || obj2 > 99999.99 || obj2 == "") {
+
+                $("#div2").attr("class", "validate_msg_long error_msg");
+
+                return;
+            }
+        }
+
+        if (obj3 = $("#descr").val() != "") {
+
+            var obj3 = $("#descr").val();
+
+            if (!new RegExp("^(?!_)(?!.*?_$)[a-zA-Z0-9_\u4e00-\u9fa5]{0,100}$").test(obj3)) {
+
+                $("#div3").attr("class", "validate_msg_short error_msg");
+
+                return;
+            }
+        }
+
+        $.ajax({
+
+            type: "post",
+
+            url: "/updateCost",
+
+            data: {
+                costId: $("#costId").val(),
+                name: $("#name").val(),
+                costType: $("input[type='radio']:checked").val(),
+                baseDuration: $("#baseDuration").val(),
+                baseCost: $("#baseCost").val(),
+                unitCost: $("#unitCost").val(),
+                descr: $("#descr").val()
+            },
+            success: function (result) {
+
+                //保存结果的提示
+
+                if (result) {
+
+                    window.location.href = "/fee_list";
+
+                } else {
+
+                    window.setTimeout("showResultDiv(false);", 3000);
+                }
+            }
+        })
+    });
+
+    $("#name").focus(function () {
+        $("#div4").attr("class", "validate_msg_short");
+    })
+    $("#baseDuration").focus(function () {
+        $("#div0").attr("class", "validate_msg_long");
+    })
+    $("#baseCost").focus(function () {
+        $("#div1").attr("class", "validate_msg_long");
+    })
+    $("#unitCost").focus(function () {
+        $("#div2").attr("class", "validate_msg_long");
+    })
+    $("#descr").focus(function () {
+        $("#div3").attr("class", "validate_msg_short");
+    })
 </script>
 </html>

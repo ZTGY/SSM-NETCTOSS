@@ -13,6 +13,7 @@
             showResultDiv(true);
             window.setTimeout("showResultDiv(false);", 3000);
         }
+
         function showResultDiv(flag) {
             var divResult = document.getElementById("save_result_info");
             if (flag)
@@ -20,11 +21,16 @@
             else
                 divResult.style.display = "none";
         }
+
         //用来显示当前用户姓名
         function getUsername() {
+
             $.ajax({
+
                 url: "/showName",
+
                 success: function (result) {
+
                     $("#username").html(result.data.name);
                 }
             })
@@ -47,9 +53,61 @@
                 }
             });
         }
+
         findAllModuleNames();
 
         function saveAdmin() {
+
+            var obj = $("#name").val();
+
+            if (obj == "" || !new RegExp("^(?!_)(?!.*?_$)[a-zA-Z0-9_\u4e00-\u9fa5]{0,20}$").test(obj)) {
+
+                $("#div").attr("class", "validate_msg_long error_msg");
+
+                return;
+            }
+            var obj1 = $("#adminCode").val();
+
+            if (obj1 == "" || !new RegExp("^(?!_)(?!.*?_$)[a-zA-Z0-9_\u4e00-\u9fa5]{0,30}$").test(obj1)) {
+
+                $("#div1").attr("class", "validate_msg_long error_msg");
+
+                return;
+            }
+
+            var obj2 = $("#password").val();
+
+            if (obj2 == "" || !new RegExp("^(?!_)(?!.*?_$)[a-zA-Z0-9_\u4e00-\u9fa5]{0,30}$").test(obj2)) {
+
+                $("#div2").attr("class", "validate_msg_long error_msg");
+
+                return;
+            }
+
+            if ($("#password").val() != $("#password2").val()) {
+
+                $("#div3").attr("class", "validate_msg_long error_msg").html("两次密码必须相同");
+
+                return;
+            }
+
+            var obj3 = $("#telephone").val();
+
+            if (obj3 == "" || !new RegExp("^(13[0-9]|15[0|3|6|7|8|9]|18[8|9])\\d{8}$").test(obj3)) {
+
+                $("#div4").attr("class", "validate_msg_medium error_msg").html("手机号码格式不正确");
+
+                return;
+            }
+
+            var obj4 = $("#email").val();
+
+            if (obj4 == "" || !new RegExp("^\\w+([-+.]\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*$").test(obj4)) {
+
+                $("#div5").attr("class", "validate_msg_medium error_msg").html("邮箱格式不正确");
+
+                return;
+            }
 
             var arr = new Array();
 
@@ -57,6 +115,13 @@
 
                 arr.push($(this).attr("num"));
             });
+
+            if (arr == "") {
+
+                $("#div6").attr("class", "validate_msg_tiny error_msg");
+
+                return;
+            }
 
             $.ajax({
 
@@ -100,6 +165,29 @@
                 }
             })
         }
+        $(function () {
+            $("#name").focus(function () {
+                $("#div").attr("class", "validate_msg_long");
+            })
+            $("#adminCode").focus(function () {
+                $("#div1").attr("class", "validate_msg_long");
+            })
+            $("#password").focus(function () {
+                $("#div2").attr("class", "validate_msg_long");
+            })
+            $("#password2").focus(function () {
+                $("#div3").attr("class", "validate_msg_long").html(null);
+            })
+            $("#telephone").focus(function () {
+                $("#div4").attr("class", "validate_msg_medium").html(null);
+            })
+            $("#email").focus(function () {
+                $("#div5").attr("class", "validate_msg_medium").html(null);
+            })
+            $("#email").blur(function () {
+                $("#div6").attr("class", "validate_msg_tiny");
+            })
+        })
     </script>
 </head>
 <body>
@@ -133,53 +221,47 @@
     <div class="input_info">
         <input type="text" id="name"/>
         <span class="required">*</span>
-        <div class="validate_msg_long">20长度以内的汉字、字母、数字的组合</div>
+        <div class="validate_msg_long" id="div">20长度以内的汉字、字母、数字的组合</div>
     </div>
     <div class="text_info clearfix"><span>管理员账号：</span></div>
     <div class="input_info">
         <input type="text" id="adminCode"/>
         <span class="required">*</span>
-        <div class="validate_msg_long">30长度以内的字母、数字和下划线的组合</div>
+        <div class="validate_msg_long" id="div1">30长度以内的字母、数字和下划线的组合</div>
     </div>
     <div class="text_info clearfix"><span>密码：</span></div>
     <div class="input_info">
         <input type="password" id="password"/>
         <span class="required">*</span>
-        <div class="validate_msg_long ">30长度以内的字母、数字和下划线的组合</div>
+        <div class="validate_msg_long" id="div2">30长度以内的字母、数字和下划线的组合</div>
     </div>
     <div class="text_info clearfix"><span>重复密码：</span></div>
     <div class="input_info">
         <input type="password" id="password2"/>
         <span class="required">*</span>
-        <div class="validate_msg_long ">两次密码必须相同</div>
+        <div class="validate_msg_long" id="div3"></div>
     </div>
-    <div class="text_info clearfix"><span>电话：</span></div>
+    <div class="text_info clearfix"><span>移动电话：</span></div>
     <div class="input_info">
         <input type="text" class="width200" id="telephone"/>
         <span class="required">*</span>
-        <div class="validate_msg_medium ">正确的电话号码格式：手机或固话</div>
+        <div class="validate_msg_medium" id="div4"></div>
     </div>
     <div class="text_info clearfix"><span>Email：</span></div>
     <div class="input_info">
         <input type="text" class="width200" id="email"/>
         <span class="required">*</span>
-        <div class="validate_msg_medium ">50长度以内，正确的 email 格式</div>
+        <div class="validate_msg_medium" id="div5"></div>
     </div>
     <div class="text_info clearfix"><span>角色：</span></div>
     <div class="input_info_high">
         <div class="input_info_scroll">
             <ul id="ul">
-                <!--<li><input type="checkbox"  />超级管理员</li>-->
-                <!--<li><input type="checkbox" />账务账号管理员</li>-->
-                <!--<li><input type="checkbox" />业务账号管理员</li>-->
-                <!--<li><input type="checkbox" />账务账号管理员</li>-->
-                <!--<li><input type="checkbox" />业务账号管理员</li>-->
-                <!--<li><input type="checkbox" />账务账号管理员</li>-->
-                <!--<li><input type="checkbox" />业务账号管理员</li>-->
+
             </ul>
         </div>
         <span class="required">*</span>
-        <div class="validate_msg_tiny ">至少选择一个</div>
+        <div class="validate_msg_tiny" id="div6">至少选择一个</div>
     </div>
     <div class="button_info clearfix">
         <input type="button" value="保存" class="btn_save" onclick="saveAdmin();"/>

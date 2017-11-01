@@ -68,12 +68,7 @@ public class ServiceController {
     //添加一条业务账号
     @ResponseBody
     @RequestMapping(value = "/service_add1")
-    public AjaxResult addService1(Services services, @RequestParam("loginPasswd2") String loginPasswd2) {
-
-        if (!services.getLoginPasswd().equals(loginPasswd2)) {
-
-            return new AjaxResult(2);
-        }
+    public AjaxResult addService1(Services services) {
 
         services.setStatus("开通");
         //设置日期的创建格式
@@ -82,9 +77,12 @@ public class ServiceController {
         int i = servicesService.insertSelective(services);
 
         if (i > 0) {
-            return new AjaxResult(1);
+
+            return new AjaxResult(true);
+
         } else {
-            return new AjaxResult(3);
+
+            return new AjaxResult(false);
         }
     }
 
@@ -170,7 +168,7 @@ public class ServiceController {
 
     //修改一条业务账号
     @RequestMapping(value = "/updateService", method = RequestMethod.POST)
-    public String updateService(Services services,Cost cost) {
+    public String updateService(Services services, Cost cost) {
 
         Cost cost1 = costService.selectByCostType(cost.getCostType());
 

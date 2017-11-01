@@ -17,6 +17,12 @@ public class AjaxResult {
         this.data = data;
     }
 
+    public AjaxResult(String message, Integer errorCode, Object data) {
+        this.message = message;
+        this.errorCode = errorCode;
+        this.data = data;
+    }
+
     public String getMessage() {
         return message;
     }

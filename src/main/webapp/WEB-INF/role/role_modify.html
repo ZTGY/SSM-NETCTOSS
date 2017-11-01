@@ -35,18 +35,19 @@
 
 
         function findAllModuleNames() {
+
             $.ajax({
 
                 url: "/findAllModuleNames",
 
                 success: function (result) {
 
-                    $.each(result.data, function (index, domEle) {
+                    for (var i = 0; i < result.data.length; i++) {
 
-                        var li = $("<li></li>").append($("<input type='checkbox'/>").attr("num", domEle.moduleId)).append(domEle.name);
+                        var li = $("<li></li>").append($("<input type='checkbox'/>").attr("num", result.data[i].moduleId)).append(result.data[i].name);
 
                         $("#ul").append(li);
-                    })
+                    }
                 }
             });
 
@@ -66,10 +67,10 @@
 
                     $("#roleName").val(result.data.name)
 
-                    $.each(result.data.moduleInfoList, function (index, domEle) {
+                    for (var i = 0; i < result.data.moduleInfoList.length; i++) {
 
-                        $("[num = '" + domEle.moduleId + "']:checkbox").attr("checked", true);
-                    })
+                        $("[num = '" + result.data.moduleInfoList[i].moduleId + "']:checkbox").attr("checked", true);
+                    }
                 }
             })
         })
@@ -79,9 +80,9 @@
 
             var obj = $("#roleName").val();
 
-            if (obj == "") {
+            if (obj == "" || !new RegExp("^(?!_)(?!.*?_$)[a-zA-Z0-9_\u4e00-\u9fa5]{0,20}$").test(obj)) {
 
-                $("#div").attr("class", "validate_msg_tiny error_msg");
+                $("#div").attr("class", "validate_msg_medium error_msg");
 
                 return;
             }
@@ -93,6 +94,13 @@
                 s += $(this).attr("num") + ",";
             });
 
+
+            if (s == "") {
+
+                $("#div1").attr("class", "validate_msg_tiny error_msg");
+
+                return;
+            }
 
             $.ajax({
 
@@ -124,9 +132,18 @@
                 }
             });
         }
+        $(function () {
 
-        $("#roleName").blur(function () {
-            $("#div").attr("class", "validate_msg_tiny")
+            $("#roleName").focus(function () {
+
+                $("#div").attr("class", "validate_msg_medium")
+            })
+
+            $("#roleName").blur(function () {
+
+                $("#div1").attr("class", "validate_msg_tiny");
+            })
+
         })
     </script>
 </head>
@@ -163,7 +180,7 @@
         <div class="input_info">
             <input type="text" class="width200" id="roleName"/>
             <span class="required">*</span>
-            <div class="validate_msg_medium">不能为空，且为20长度的字母、数字和汉字的组合</div>
+            <div class="validate_msg_medium" id="div">不能为空，且为20长度的字母、数字和汉字的组合</div>
         </div>
         <div class="text_info clearfix"><span>设置权限：</span></div>
         <div class="input_info_high">
@@ -179,7 +196,7 @@
                 </ul>
             </div>
             <span class="required">*</span>
-            <div class="validate_msg_tiny" id="div">至少选择一个权限</div>
+            <div class="validate_msg_tiny" id="div1">至少选择一个权限</div>
         </div>
         <div class="button_info clearfix">
             <input type="button" value="保存" class="btn_save" onclick="saveRole();"/>
