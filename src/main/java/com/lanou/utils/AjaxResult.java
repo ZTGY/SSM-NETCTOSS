@@ -4,7 +4,7 @@ package com.lanou.utils;
  * Created by dllo on 17/10/16.
  */
 public class AjaxResult {
-    private String message;
+    private Object message;
     private Integer errorCode;
     private Object data;
 
@@ -17,17 +17,17 @@ public class AjaxResult {
         this.data = data;
     }
 
-    public AjaxResult(String message, Integer errorCode, Object data) {
+    public AjaxResult(Object message, Integer errorCode, Object data) {
         this.message = message;
         this.errorCode = errorCode;
         this.data = data;
     }
 
-    public String getMessage() {
+    public Object getMessage() {
         return message;
     }
 
-    public void setMessage(String message) {
+    public void setMessage(Object message) {
         this.message = message;
     }
 
@@ -50,7 +50,7 @@ public class AjaxResult {
     @Override
     public String toString() {
         return "AjaxResult{" +
-                "message='" + message + '\'' +
+                "message=" + message +
                 ", errorCode=" + errorCode +
                 ", data=" + data +
                 '}';

@@ -175,6 +175,8 @@ public class RoleController {
 
         roleInfoService.deleteRoleAndModuleByRoleId(roleId);
 
-        return new AjaxResult(roleId);
+        PageInfo<RoleInfo> pageInfo = roleInfoService.findAllRolesWithPageInfo(1, 3);
+
+        return new AjaxResult(pageInfo,0,roleId);
     }
 }

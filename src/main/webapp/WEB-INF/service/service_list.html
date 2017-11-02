@@ -34,11 +34,13 @@
                         $("#trname" + serviceId).remove();
 
                         $("#status" + serviceId).html(result.data.status);
+
+                        alert("删除成功，且已删除其下属的业务账号！");
                     }
 
                 });
 
-                alert("删除成功，且已删除其下属的业务账号！");
+
             }
 
         }

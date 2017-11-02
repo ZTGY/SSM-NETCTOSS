@@ -25,9 +25,13 @@
         //用来显示当前用户姓名
         function getUsername() {
             $.ajax({
+
                 url: "/showName",
+
                 success: function (result) {
+
                     $("#username").html(result.data.name);
+
                 }
             })
         }
@@ -42,6 +46,8 @@
 
                 var adminId = $(this).attr("num");
 
+                var pageNo = $(this).attr("pageNo");
+
                 $.ajax({
 
                     url: "/delAdmin",
@@ -51,14 +57,19 @@
                     },
                     success: function (result) {
 
-                        var adminId = result.data;
+                        var s = result.message;
 
-                        $("#trname" + adminId).remove();
+                        if (s.total % s.pageSize == 0) {
 
+                            getAllMessage(s.lastPage);
+
+                        } else {
+
+                            getAllMessage(pageNo);
+                        }
+                        alert("删除成功");
                     }
                 });
-
-                alert("删除成功");
 
             }
 
@@ -77,6 +88,7 @@
                     adminId: adminId
                 },
                 success: function () {
+
                     window.location.href = "/admin_modify1";
                 }
             });
@@ -93,7 +105,7 @@
         }
 
 
-        function addNewTr(msg) {
+        function addNewTr(msg,pageNo) {
 
             var tdleft = $("<td></td>").html("<input type='checkbox'/>");
 
@@ -137,19 +149,19 @@
 
             var tdmodify = $("<input type='button' value='修改' class='btn_modify'/>").click(adminmodify).attr("num", msg.adminId).attr("id", "modify" + msg.adminId);
 
-            var tddelete = $("<input type='button' value='删除' class='btn_delete'/>").click(deleteAdmin).attr("num", msg.adminId).attr("id", "delete" + msg.adminId);
+            var tddelete = $("<input type='button' value='删除' class='btn_delete'/>").click(deleteAdmin).attr("num", msg.adminId).attr("pageNo",pageNo).attr("id", "delete" + msg.adminId);
 
             var tdright = $("<td></td>").append(tdmodify).append(tddelete);
 
             var trob = $("<tr class='trob'></tr>").append(tdleft).append(tdleft1).append(tdleft2).append(tdleft3).append(tdleft4)
-                    .append(tdleft5).append(tdleft6).append(tdleft7).append(tdright).attr("id", "trname" + msg.adminId);
+                    .append(tdleft5).append(tdleft6).append(tdleft7).append(tdright).attr("id", "tr" + msg.adminId);
 
             $("#datalist").append(trob);
 
         }
 
         //获取全部信息用来显示全部,显示的为第一页的数据
-        function getAllMessage() {
+        function getAllMessage(pageNo) {
 
             $.ajax({
 
@@ -157,7 +169,7 @@
 
                 data: {
 
-                    pageNo: null,
+                    pageNo: pageNo,
 
                     pageSize: 3,
 
@@ -171,7 +183,7 @@
 
                     $.each(result.list, function (index, domEle) {
 
-                        addNewTr(domEle);
+                        addNewTr(domEle,pageNo);
                     });
                     pageInfo(result, 0);
 
@@ -179,7 +191,7 @@
             });
         }
 
-        getAllMessage();
+        getAllMessage(null);
 
 
         function pageInfo(result, flag) {
@@ -275,7 +287,7 @@
 
                     $.each(result.list, function (index, domEle) {
 
-                        addNewTr(domEle);
+                        addNewTr(domEle,pageNo);
                     });
 
                     pageInfo(result, flag);

@@ -19,6 +19,7 @@
 
                 var costId = $(this).attr("num");
 
+
                 $.ajax({
 
                     url: "/startCost",
@@ -51,7 +52,11 @@
             //资费的删除方法
             //获取cost的实际id
             if (r) {
+
                 var costId = $(this).attr("num");
+
+                var pageNo = $(this).attr("pageNo");
+
                 $.ajax({
 
                     url: "/delCost",
@@ -61,16 +66,25 @@
                     },
                     success: function (result) {
 
-                        var costId = result.data;
+                        var s = result.message;
 
-                        $("#trname" + costId).remove();
+                        if (s.total % s.pageSize == 0) {
+
+                            getAllMessage(s.lastPage);
+
+                        } else {
+
+                            getAllMessage(pageNo);
+                        }
+
+                        document.getElementById("operate_result_info").style.display = "block";
                     }
                 });
-                document.getElementById("operate_result_info").style.display = "block";
+
             }
         }
 
-        function addNewTr(msg) {
+        function addNewTr(msg,pageNo) {
 
             var tdleft = $("<td></td>").html(msg.costId);
 
@@ -101,12 +115,12 @@
             }
             if (msg.status == "暂停") {
 
-                var tdmodify = $("<input type='button' value='修改' class='btn_modify'/>").click(feemodify).attr("num", msg.costId).attr("id","modify"+msg.costId);
+                var tdmodify = $("<input type='button' value='修改' class='btn_modify'/>").click(feemodify).attr("num", msg.costId).attr("id", "modify" + msg.costId);
 
             }
 
             if (msg.status == "暂停") {
-                var tddelete = $("<input type='button' value='删除' class='btn_delete'/>").click(deleteFee).attr("num", msg.costId).attr("id","delete"+msg.costId);
+                var tddelete = $("<input type='button' value='删除' class='btn_delete'/>").click(deleteFee).attr("num", msg.costId).attr("pageNo",pageNo).attr("id", "delete" + msg.costId);
             }
             var tdright = $("<td></td>").append(tdstart).append(tdmodify).append(tddelete);
 
@@ -158,11 +172,11 @@
 
 
         //获取全部信息用来显示全部,显示的为第一页的数据
-        function getAllMessage() {
+        function getAllMessage(pageNo) {
             $.ajax({
                 url: "/pageInfo",
                 data: {
-                    pageNo: null,
+                    pageNo: pageNo,
 
                     pageSize: 5,
 
@@ -176,14 +190,14 @@
 
                     $.each(result.list, function (index, domEle) {
 
-                        addNewTr(domEle);
+                        addNewTr(domEle,pageNo);
                     });
 
                     pageInfo(result, 0);
                 }
             });
         }
-        getAllMessage();
+        getAllMessage(null);
 
         function pageInfo(result, flag) {
 
@@ -257,7 +271,7 @@
 
                     $.each(result.list, function (index, domEle) {
 
-                        addNewTr(domEle);
+                        addNewTr(domEle,pageNo);
                     });
 
                     pageInfo(result, flag);

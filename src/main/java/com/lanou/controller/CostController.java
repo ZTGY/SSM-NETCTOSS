@@ -66,7 +66,7 @@ public class CostController {
 
     //修改一条数据
     @ResponseBody
-    @RequestMapping(value = "/updateCost",method = RequestMethod.POST)
+    @RequestMapping(value = "/updateCost", method = RequestMethod.POST)
     public AjaxResult update(Cost cost) {
 
         int i = costService.updateByPrimaryKeySelective(cost);
@@ -129,7 +129,9 @@ public class CostController {
 
         costService.deleteByPrimaryKey(costId);
 
-        return new AjaxResult(costId);
+        PageInfo<Cost> pageInfo = costService.findWithPageInfo(1, 5, 0);
+
+        return new AjaxResult(pageInfo,0,costId);
     }
 
 

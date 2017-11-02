@@ -219,6 +219,8 @@ public class AdminInfoController {
 
         adminInfoService.deleteAdminAndRoleByAdminId(adminId);
 
-        return new AjaxResult(adminId);
+        PageInfo<AdminInfo> pageInfo = adminInfoService.findAllAdminInfoWithPageInfo(1, 3);
+
+        return new AjaxResult(pageInfo,0,adminId);
     }
 }

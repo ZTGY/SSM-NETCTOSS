@@ -17,6 +17,8 @@
 
                 var roleId = $(this).attr("num");
 
+                var pageNo = $(this).attr("pageNo");
+
                 $.ajax({
 
                     url: "/delRole",
@@ -26,14 +28,22 @@
                     },
                     success: function (result) {
 
-                        var roleId = result.data;
+                        var s = result.message;
 
-                        $("#trname" + roleId).remove();
+                        if (s.total % s.pageSize == 0) {
+
+                            getAllMessage(s.lastPage);
+
+                        } else {
+
+                            getAllMessage(pageNo);
+                        }
+
+                        alert("删除成功");
 
                     }
                 });
 
-                alert("删除成功");
             }
 
         }
@@ -56,7 +66,7 @@
             });
         }
 
-        function addNewTr(msg) {
+        function addNewTr(msg,pageNo) {
 
             var tdleft = $("<td></td>").html(msg.roleId);
 
@@ -76,7 +86,7 @@
 
             var tdmodify = $("<input type='button' value='修改' class='btn_modify'/>").click(rolemodify).attr("num", msg.roleId).attr("id", "modify" + msg.roleId);
 
-            var tddelete = $("<input type='button' value='删除' class='btn_delete'/>").click(deleteRole).attr("num", msg.roleId).attr("id", "delete" + msg.roleId);
+            var tddelete = $("<input type='button' value='删除' class='btn_delete'/>").click(deleteRole).attr("num", msg.roleId).attr("pageNo",pageNo).attr("id", "delete" + msg.roleId);
 
             var tdright = $("<td></td>").append(tdmodify).append(tddelete);
 
@@ -87,14 +97,14 @@
         }
 
         //获取全部信息用来显示全部,显示的为第一页的数据
-        function getAllMessage() {
+        function getAllMessage(pageNo) {
 
             $.ajax({
 
                 url: "/role_pageInfo",
 
                 data: {
-                    pageNo: null,
+                    pageNo: pageNo,
 
                     pageSize: 3
 
@@ -107,14 +117,14 @@
 
                     $.each(result.list, function (index, domEle) {
 
-                        addNewTr(domEle);
+                        addNewTr(domEle,pageNo);
                     });
 
                     pageInfo(result);
                 }
             });
         }
-        getAllMessage();
+        getAllMessage(null);
 
         function pageInfo(result) {
 
@@ -185,7 +195,7 @@
 
                     $.each(result.list, function (index, domEle) {
 
-                        addNewTr(domEle);
+                        addNewTr(domEle,pageNo);
                     });
 
                     pageInfo(result);
